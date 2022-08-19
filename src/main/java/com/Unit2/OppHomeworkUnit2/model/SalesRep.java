@@ -13,16 +13,13 @@ public class SalesRep {
     public SalesRep() {
 
     }
-
     public SalesRep(String name) {
         this.name = name;
     }
-
     //getters
     public String getName() {
         return name;
     }
-
     //setters
     public void setName(String name) {
         this.name = name;
