@@ -4,33 +4,38 @@ import com.Unit2.OppHomeworkUnit2.model.Enums.Industry;
 import com.Unit2.OppHomeworkUnit2.model.Enums.Product;
 import com.Unit2.OppHomeworkUnit2.model.Enums.Status;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.*;
 
 @Entity
+@Table (name = "lead_")
 public class Lead {
 
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String name;
+
     private String phoneNumber;
+
     private String email;
+
     private String companyName;
-
-
-    private static int idCounter;
+    @ManyToOne
+    private SalesRep salesRepLead;
 
 
     //constructor
     public Lead() {
     }
-    public Lead(String name, String phoneNumber, String email, String companyName) {
-        setId();
+    public Lead(String name, String phoneNumber, String email, String companyName, SalesRep salesRepLead) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.companyName = companyName;
+        this.id = id;
+        this.salesRepLead = salesRepLead;
     }
 
     //We create the different Regex in variables so they can be easily called/accessed by the different methods without having to write them every single time.
@@ -76,7 +81,7 @@ public class Lead {
 
 
                 //once all the parameters are valid, we simply create the Lead.
-                Lead newLead = new Lead(leadName, leadPhone, leadEmail, leadCompany);
+                Lead newLead = new Lead(leadName, leadPhone, leadEmail, leadCompany, leadSalesRep);
 
                 leadList.add(newLead);
     }
@@ -95,11 +100,11 @@ public class Lead {
         }
     }
 
-    public static void lookUpLead(int id){
+    public static void lookUpLead(Long id){
         //we search the ID on the list of leads in the system, to check if we find it and we can print the information
         boolean found = false;
         for (int i = 0; i < leadList.size(); i++) {
-            Integer leadID = leadList.get(i).getId();
+            Integer leadID = Math.toIntExact(leadList.get(i).getId());
             if (leadID.equals(id)) {
                 System.out.println(
                         "This ID corresponds to the Lead: " + leadList.get(i).getName() + " \n " +
@@ -110,7 +115,7 @@ public class Lead {
                 //if the ID is not found in the leadsList, but it IS found in the list of old leads, the system
                 //will inform the user that the lead is no longer active, and is now an opportunity.
                 for (int j = 0; j < oldLeadList.size(); j++) {
-                    leadID = leadList.get(i).getId();
+                    leadID = Math.toIntExact(leadList.get(i).getId());
                     if (leadID.equals(id)) {
                         System.out.println("The ID you introduced corresponds to a Lead that has became an Opportunity " +
                                 "and is no longer in our system");
@@ -125,7 +130,7 @@ public class Lead {
         }
     }
 
-    public static void convertID(int idNum) {
+    public static void convertID(Long idNum) {
         String regex = "([A-Z][a-z]+([ ]?[a-z]?['-]?)*)+";
 
         Scanner input = new Scanner(System.in);
@@ -169,7 +174,7 @@ public class Lead {
                             }
                         }
                         //Creates a new Contact with the Lead's data, adds it and Opportunity in the respective lists
-                        Contact contact = new Contact(leadList.get(i).getName(), leadList.get(i).getPhoneNumber(), leadList.get(i).getEmail(), leadList.get(i).getCompanyName());
+                        Contact contact = new Contact(leadList.get(i).getName(), leadList.get(i).getPhoneNumber(), leadList.get(i).getEmail(), leadList.get(i).getCompanyName(), leadList.get(i).getAccountContact());
                         contactList.add(contact);
                         Opportunity opportunity = new Opportunity(product, truckNum, contact, Status.OPEN);
                         Opportunity.opportunitiesList.add(opportunity);
@@ -251,7 +256,7 @@ public class Lead {
 
 
     //getters
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -271,10 +276,32 @@ public class Lead {
         return companyName;
     }
 
-    //setters
-    public void setId() {
-        this.id = idCounter++;
+    public static ArrayList<Lead> getOldLeadList() {
+        return oldLeadList;
     }
+
+    public SalesRep getSalesRepLead() {
+        return salesRepLead;
+    }
+
+    public static String getNameRegex() {
+        return nameRegex;
+    }
+
+    public static String getPhoneRegex() {
+        return phoneRegex;
+    }
+
+    public static String getEmailRegex() {
+        return emailRegex;
+    }
+
+    public static ArrayList<Lead> getLeadList() {
+        return leadList;
+    }
+
+
+    //setters
 
     public void setName(String name) {
         this.name = name;
@@ -291,4 +318,54 @@ public class Lead {
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }
+
+    public static void setOldLeadList(ArrayList<Lead> oldLeadList) {
+        Lead.oldLeadList = oldLeadList;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setSalesRepLead(SalesRep salesRepLead) {
+        this.salesRepLead = salesRepLead;
+    }
+
+    public static void setNameRegex(String nameRegex) {
+        Lead.nameRegex = nameRegex;
+    }
+
+    public static void setPhoneRegex(String phoneRegex) {
+        Lead.phoneRegex = phoneRegex;
+    }
+
+    public static void setEmailRegex(String emailRegex) {
+        Lead.emailRegex = emailRegex;
+    }
+
+    public static void setLeadList(ArrayList<Lead> leadList) {
+        Lead.leadList = leadList;
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

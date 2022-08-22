@@ -43,7 +43,7 @@ public class Menu {
 
         String exit = null;
 
-        int id = 0;
+        Long id = 0L;
 
         System.out.println("List of available commands:\n- New Lead\n- Show Leads/SalesReps/Opportunities/Accounts\n" +
                 "- Lookup Lead/Opportunity/Account ID\n- Convert ID\n- Close Lost/Won ID\n- Help Reports/States\n- Help\n- Exit");
@@ -63,7 +63,7 @@ public class Menu {
                     command.contains("lookup lead") || command.contains("close lost") || command.contains("close won")) {
                 String[] splitCommand = command.split(" ");
                 try {
-                    id = Integer.parseInt(splitCommand[splitCommand.length - 1]);
+                    id = Long.parseLong(splitCommand[splitCommand.length - 1]);
                 }catch(NumberFormatException e){
                     command = "EXCEPTION";
                 }
@@ -74,7 +74,7 @@ public class Menu {
                 String[] splitCommand = command.split(" ");
                 command = splitCommand[0];
                 try {
-                    id = Integer.parseInt(splitCommand[splitCommand.length - 1]);
+                    id = Long.parseLong(splitCommand[splitCommand.length - 1]);
                 }catch(NumberFormatException e){
                     command = "EXCEPTION";
                     //En el caso que no se haya introducido un ID correcto saltara una excepcion
