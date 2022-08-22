@@ -2,8 +2,7 @@ package com.Unit2.OppHomeworkUnit2.model;
 
 import com.Unit2.OppHomeworkUnit2.model.Enums.Industry;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,17 +10,23 @@ import java.util.List;
 public class Account {
 
     @Id
-    int id;
-    Industry industry;
-    int employeeCount;
-    String city;
-    String country;
-    List<Contact> contactList;
-    List<Opportunity> opportunityList;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    private Industry industry;
+    private int employeeCount;
+    private String city;
+    private String country;
+    @OneToMany (mappedBy = "accountContact")
+    private List<Contact> contactList;
+    @OneToMany (mappedBy = "accountOpportunity")
+    private List<Opportunity> opportunityList;
 
-    int idCounter = 0;
 
     public static List<Account> accountsList = new ArrayList<>();
+
+    public Account() {
+
+    }
 
     //constructor
     public Account(Industry industry, int employeeCount, String city, String country, List<Contact> contactList, List<Opportunity> opportunityList) {
@@ -48,7 +53,7 @@ public class Account {
         }
     }
 
-    public static void lookUpAccount(int id){
+    public static void lookUpAccount(Long id){
         //we search the ID on the list of accounts in the system, to check if we find it and we can print the information
             for (int i = 0; i < accountsList.size(); i++) {
                 Integer leadID = accountsList.get(i).getId();
@@ -94,9 +99,7 @@ public class Account {
     }
 
     //setters
-    public void setId(int id) {
-        this.id = idCounter++;
-    }
+
 
     public void setIndustry(Industry industry) {
         this.industry = industry;
