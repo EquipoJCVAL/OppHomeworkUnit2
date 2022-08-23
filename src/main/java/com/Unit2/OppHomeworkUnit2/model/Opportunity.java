@@ -16,6 +16,8 @@ public class Opportunity {
     private Product product;
     private int quantity;
     private Contact decisionMaker;
+
+    private SalesRep salesRep;
     private Status status;
 
     private static int idCounter;
@@ -27,10 +29,11 @@ public class Opportunity {
     //constructor
     public Opportunity(){
     }
-    public Opportunity(Product product, int quantity, Contact decisionMaker, Status status) {
+    public Opportunity(Product product, int quantity, Contact decisionMaker, SalesRep salesRep, Status status) {
         this.product = product;
         this.quantity = quantity;
         this.decisionMaker = decisionMaker;
+        this.salesRep = salesRep;
         this.status = status;
     }
 
@@ -110,6 +113,10 @@ public class Opportunity {
         return decisionMaker;
     }
 
+    public SalesRep getSalesRep() {
+        return salesRep;
+    }
+
     public Status getStatus() {
         return status;
     }
@@ -130,6 +137,10 @@ public class Opportunity {
 
     public void setDecisionMaker(Contact decisionMaker) {
         this.decisionMaker = decisionMaker;
+    }
+
+    public void setSalesRep(SalesRep salesRep) {
+        this.salesRep = salesRep;
     }
 
     public void setStatus(Status status) {

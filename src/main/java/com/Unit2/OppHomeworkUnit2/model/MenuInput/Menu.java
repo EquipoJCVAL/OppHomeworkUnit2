@@ -3,6 +3,7 @@ package com.Unit2.OppHomeworkUnit2.model.MenuInput;
 import com.Unit2.OppHomeworkUnit2.model.Account;
 import com.Unit2.OppHomeworkUnit2.model.Lead;
 import com.Unit2.OppHomeworkUnit2.model.Opportunity;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Objects;
 import java.util.Scanner;
@@ -49,7 +50,6 @@ public class Menu {
                 }catch(NumberFormatException e){
                     command = "EXCEPTION";
                 }
-
 
                 command = splitCommand[0] + " " + splitCommand[1];
 

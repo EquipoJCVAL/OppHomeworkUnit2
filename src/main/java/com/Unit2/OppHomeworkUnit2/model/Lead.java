@@ -3,13 +3,16 @@ package com.Unit2.OppHomeworkUnit2.model;
 import com.Unit2.OppHomeworkUnit2.model.Enums.Industry;
 import com.Unit2.OppHomeworkUnit2.model.Enums.Product;
 import com.Unit2.OppHomeworkUnit2.model.Enums.Status;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.util.*;
 
 @Entity
 public class Lead {
+
 
     @Id
     private int id;
@@ -18,6 +21,8 @@ public class Lead {
     private String email;
     private String companyName;
 
+    @ManyToOne
+    private SalesRep salesRep;
 
     private static int idCounter;
 
@@ -25,13 +30,16 @@ public class Lead {
     //constructor
     public Lead() {
     }
-    public Lead(String name, String phoneNumber, String email, String companyName) {
+    public Lead(String name, String phoneNumber, String email, String companyName, SalesRep salesRep) {
         setId();
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.companyName = companyName;
+        this.salesRep = salesRep;
     }
+
+
 
     //We create the different Regex in variables so they can be easily called/accessed by the different methods without having to write them every single time.
     static String nameRegex = "^[A-Z][a-z]*[ ][A-Z][a-z]+$";
@@ -46,37 +54,66 @@ public class Lead {
 
     public static void newLead() {
 
+
         //With this method we simply call the Scanner so that we can get the 4 parameters to create a new lead.
         //And then test if they are valid matching them with the existing Regex variables.
         Scanner sc = new Scanner(System.in);
 
-                System.out.println("Please input the new Lead's name");
-                String leadName = sc.nextLine();
-                while(!leadName.matches(nameRegex)) {
-                    System.out.println("The name introduced is not valid, please only use letters and capitalize the first one of each name.");
-                    leadName = sc.nextLine();
+        System.out.println("Please input the new Lead's name");
+        String leadName = sc.nextLine();
+        while(!leadName.matches(nameRegex)) {
+            System.out.println("The name introduced is not valid, please only use letters and capitalize the first one of each name.");
+            leadName = sc.nextLine();
+        }
+
+        System.out.println("Please input the new Lead's phone number");
+        String leadPhone = sc.nextLine();
+        while(!leadPhone.matches(phoneRegex)) {
+            System.out.println("The phone number introduced is not valid, please only use numbers");
+            leadPhone = sc.nextLine();
+        }
+
+        System.out.println("Please input the new Lead's email");
+        String leadEmail = sc.nextLine();
+        while (!leadEmail.matches(emailRegex)) {
+            System.out.println("The email address introduced is not valid, please use the proper format");leadEmail = sc.nextLine();
+        }
+
+        System.out.println("Please input the new Lead's company name");
+        String leadCompany = sc.nextLine();
+
+        System.out.println("In order to complete the lead creation, please input the ID of the associated SalesRep with this lead");
+
+        boolean validId = false;
+        SalesRep salesRep;
+
+        while(!validId) {
+            String salesRepIdString = sc.nextLine();
+
+            if (salesRepIdString.matches("[^a-z ]\\ *([.0-9])*\\d")) {
+
+                Integer salesRepId = Integer.valueOf(salesRepIdString);
+
+                for (int i = 0; i < SalesRep.salesRepList.size(); i++) {
+                    if (salesRepId.equals(SalesRep.salesRepList.get(i).getId())) {
+                        salesRep = SalesRep.salesRepList.get(i);
+                        validId = true;
+                    }
+                }
+                if (!validId) {
+                    System.out.println("The ID introduced doesn't match any of the existing SalesRep in our database," +
+                            "please input a different ID of an existing SalesRep.");
                 }
 
-                System.out.println("Please input the new Lead's phone number");
-                String leadPhone = sc.nextLine();
-                while(!leadPhone.matches(phoneRegex)) {
-                System.out.println("The phone number introduced is not valid, please only use numbers");
-                    leadPhone = sc.nextLine();
-                }
+            } else {
+                System.out.println("The ID you introduced is not valid, please input only numbers");
+            }
 
-                System.out.println("Please input the new Lead's email");
-                String leadEmail = sc.nextLine();
-                while (!leadEmail.matches(emailRegex)) {
-                    System.out.println("The email address introduced is not valid, please use the proper format");
-                    leadEmail = sc.nextLine();
-                }
-
-                System.out.println("Please input the new Lead's company name");
-                String leadCompany = sc.nextLine();
-
+        }
 
                 //once all the parameters are valid, we simply create the Lead.
-                Lead newLead = new Lead(leadName, leadPhone, leadEmail, leadCompany);
+                Lead newLead = new Lead(leadName, leadPhone, leadEmail, leadCompany, salesRep);
+
 
                 leadList.add(newLead);
     }
@@ -126,8 +163,13 @@ public class Lead {
     }
 
     public static void convertID(int idNum) {
+
+
+
         String regex = "([A-Z][a-z]+([ ]?[a-z]?['-]?)*)+";
 
+        Contact contact;
+        Opportunity opportunity;
         Scanner input = new Scanner(System.in);
         boolean found = false;
 
@@ -169,9 +211,10 @@ public class Lead {
                             }
                         }
                         //Creates a new Contact with the Lead's data, adds it and Opportunity in the respective lists
-                        Contact contact = new Contact(leadList.get(i).getName(), leadList.get(i).getPhoneNumber(), leadList.get(i).getEmail(), leadList.get(i).getCompanyName());
+                        contact = new Contact(leadList.get(i).getName(), leadList.get(i).getPhoneNumber(), leadList.get(i).getEmail(), leadList.get(i).getCompanyName());
                         contactList.add(contact);
-                        Opportunity opportunity = new Opportunity(product, truckNum, contact, Status.OPEN);
+                        SalesRep salesRep = leadList.get(i).salesRep;
+                        opportunity = new Opportunity(product, truckNum, contact, salesRep, Status.OPEN);
                         Opportunity.opportunitiesList.add(opportunity);
                         opportunityList.add(opportunity);
 
@@ -182,49 +225,89 @@ public class Lead {
                     }
 
                     try {
-                        //Account info
+
                         input.nextLine();
-                        System.out.println("Opportunity successfully created! To complete the process you must create an Account.");
-                        System.out.println("City name: ");
-                        String city = input.nextLine();
+                        System.out.println("Opportunity successfully created! To complete the process you must add an account.");
+                        System.out.println("You must create a new account or input the ID of an existing one.");
+                        System.out.println("Would you want to create a new account? (Y/N)");
 
-                        while (!city.matches(regex)) {
-                            System.out.println("Please, insert a valid city name capitalized (for example 'New York'): ");
-                            city = input.nextLine();
-                        }
 
-                        System.out.println("Country of the organization: ");
-                        String country = input.nextLine();
 
-                        while (!country.matches(regex)) {
-                            System.out.println("Please, insert a valid country name with the first letter capitalized: ");
-                            country = input.nextLine();
-                        }
+                            String accountResponse = input.nextLine();
 
-                        System.out.println("Number of employees: ");
-                        int employees = input.nextInt();
+                            if (accountResponse.equals("Y")) {
 
-                        System.out.println("Select the product (insert the number)\n1 - ECOMMERCE\n2 - MANUFACTURING\n3 - MEDICAL\n4 - PRODUCE\n5 - OTHER");
-                        int chosenTwo = input.nextInt();
+                                System.out.println("City name: ");
+                                String city = input.nextLine();
 
-                        Industry industry = null;
-                        while (industry == null) {
-                            switch (chosenTwo) {
-                                case 1 -> industry = Industry.ECOMMERCE;
-                                case 2 -> industry = Industry.MANUFACTURING;
-                                case 3 -> industry = Industry.MEDICAL;
-                                case 4 -> industry = Industry.PRODUCE;
-                                case 5 -> industry = Industry.OTHER;
-                                default -> {
-                                    System.out.println("Invalid number, try again.");
-                                    chosenTwo = input.nextInt();
+                                while (!city.matches(regex)) {
+                                    System.out.println("Please, insert a valid city name capitalized (for example 'New York'): ");
+                                    city = input.nextLine();
                                 }
-                            }
-                        }
 
-                        //Creates a new Account and a list for Contact and Opportunity
-                        Account account = new Account(industry, employees, city, country, contactList, opportunityList);
-                        Account.accountsList.add(account);
+                                System.out.println("Country of the organization: ");
+                                String country = input.nextLine();
+
+                                while (!country.matches(regex)) {
+                                    System.out.println("Please, insert a valid country name with the first letter capitalized: ");
+                                    country = input.nextLine();
+                                }
+
+                                System.out.println("Number of employees: ");
+                                int employees = input.nextInt();
+
+                                System.out.println("Select the product (insert the number)\n1 - ECOMMERCE\n2 - MANUFACTURING\n3 - MEDICAL\n4 - PRODUCE\n5 - OTHER");
+                                int chosenTwo = input.nextInt();
+
+                                Industry industry = null;
+                                while (industry == null) {
+                                    switch (chosenTwo) {
+                                        case 1 -> industry = Industry.ECOMMERCE;
+                                        case 2 -> industry = Industry.MANUFACTURING;
+                                        case 3 -> industry = Industry.MEDICAL;
+                                        case 4 -> industry = Industry.PRODUCE;
+                                        case 5 -> industry = Industry.OTHER;
+                                        default -> {
+                                            System.out.println("Invalid number, try again.");
+                                            chosenTwo = input.nextInt();
+                                        }
+                                    }
+                                }
+
+                                //Creates a new Account and a list for Contact and Opportunity
+                                Account account = new Account(industry, employees, city, country, contactList, opportunityList);
+                                Account.accountsList.add(account);
+                                completeAccount = true;
+
+                            }
+                            else if (accountResponse.equals("N")) {
+                                System.out.println("Please input the Account ID you'd like to add this Opportunity to.");
+
+                                boolean validId = false;
+                                while(!validId) {
+                                    String accId = input.nextLine();
+                                    if (accId.matches("\\d+")) {
+                                        for (int j = 0; j < Account.accountsList.size(); j++) {
+                                            if (Integer.parseInt(accId) == Account.accountsList.get(i).getId()) {
+
+                                                Account account = Account.accountsList.get(i);
+
+                                                account.contactList.add(contact);
+                                                account.opportunityList.add(opportunity);
+                                            }
+
+                                        }
+                                    } else {
+                                        System.out.println("Please introduce only numbers. \n Introduce the ID of the " +
+                                                "account you'd like to search.");
+                                    }
+                                }
+
+                            } else {
+                                System.out.println("Please input a valid response.");
+                                System.out.println("Would you want to create a new account? (Y/N)");
+                            }
+
 
                         //Add Lead to another list and delete it from the current one
                         oldLeadList.add(leadList.get(i));
@@ -270,6 +353,9 @@ public class Lead {
     public String getCompanyName() {
         return companyName;
     }
+    public SalesRep getSalesRep() {
+        return salesRep;
+    }
 
     //setters
     public void setId() {
@@ -290,5 +376,8 @@ public class Lead {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+    public void setSalesRep(SalesRep salesRep) {
+        this.salesRep = salesRep;
     }
 }
