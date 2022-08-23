@@ -1,6 +1,5 @@
 package com.Unit2.OppHomeworkUnit2.model.MenuInput;
 
-import com.Unit2.OppHomeworkUnit2.model.Account;
 import com.Unit2.OppHomeworkUnit2.model.Lead;
 import com.Unit2.OppHomeworkUnit2.model.Opportunity;
 
@@ -11,9 +10,6 @@ import com.Unit2.OppHomeworkUnit2.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
-import java.util.Objects;
-import java.util.Scanner;
-
 public class Menu {
     @Autowired
     static AccountRepository accountRepository;
@@ -22,13 +18,12 @@ public class Menu {
     @Autowired
     static LeadRepository leadRepository;
     @Autowired
-    static ContactRepository contactRepository;
-    @Autowired
     static SalesRepRepository salesRepRepository;
 
 
-    static int id;
+
     public static void start() throws ClassNotFoundException {
+
 
         System.out.println("     _______.     ___       __       _______     _______.   .___  ___.      ___      .__   __.      ___       _______  _______ .______      \n" +
                 "    /       |    /   \\     |  |     |   ____|   /       |   |   \\/   |     /   \\     |  \\ |  |     /   \\     /  _____||   ____||   _  \\     \n" +
@@ -45,7 +40,7 @@ public class Menu {
 
         Long id = 0L;
 
-        System.out.println("List of available commands:\n- New Lead\n- Show Leads/SalesReps/Opportunities/Accounts\n" +
+        System.out.println("List of available commands:\n- New SalesRep\n- New Lead\n- Show SalesReps/Leads/Opportunities/Accounts\n" +
                 "- Lookup Lead/Opportunity/Account ID\n- Convert ID\n- Close Lost/Won ID\n- Help Reports/States\n- Help\n- Exit");
 
         //Creamos un loop indeterminado el cual parara de ejecutarse si el objeto exit contiene "exit"
@@ -64,9 +59,10 @@ public class Menu {
                 String[] splitCommand = command.split(" ");
                 try {
                     id = Long.parseLong(splitCommand[splitCommand.length - 1]);
-                }catch(NumberFormatException e){
+                } catch (NumberFormatException e) {
                     command = "EXCEPTION";
                 }
+
 
                 command = splitCommand[0] + " " + splitCommand[1];
 
@@ -75,7 +71,7 @@ public class Menu {
                 command = splitCommand[0];
                 try {
                     id = Long.parseLong(splitCommand[splitCommand.length - 1]);
-                }catch(NumberFormatException e){
+                } catch (NumberFormatException e) {
                     command = "EXCEPTION";
                     //En el caso que no se haya introducido un ID correcto saltara una excepcion
                 }
@@ -86,21 +82,61 @@ public class Menu {
             switch (command) {
                 case "new salesrep" -> System.out.println();
 
+                case "show salesreps" -> {
+                    try {
+                        System.out.println(salesRepRepository.findAll());
+                    } catch (Exception e) {
+                        System.out.println("No records found.");
+                    }
+                }
                 case "new lead" -> Lead.newLead();
 
-                case "show salesreps" -> System.out.println();
+                case "show leads" -> {
+                    try {
+                        leadRepository.findAll();
+                    } catch (Exception e) {
+                        System.out.println("No records found.");
+                    }
+                }
+                case "show opportunities" -> {
+                    try {
+                        opportunityRepository.findAll();
+                    } catch (Exception e) {
+                        System.out.println("No records found.");
+                    }
+                }
 
-                case "show leads" -> Lead.showLeads();
+                case "show accounts" -> {
+                    try {
+                        accountRepository.findAll();
+                    } catch (Exception e) {
+                        System.out.println("No records found.");
+                    }
+                }
 
-                case "show opportunities" -> Opportunity.showOpportunities();
+                case "lookup lead" -> {
+                    if (leadRepository.findById(id).isPresent()){
+                        leadRepository.findById(id);
+                    }
+                    System.out.println("No records found.");
 
-                case "show accounts" -> Account.showAccounts();
 
-                case "lookup lead" -> Lead.lookUpLead(id);
+                }
 
-                case "lookup opportunity" -> Opportunity.lookUpOpportunity(id);
+                case "lookup opportunity" ->  {
+                    try {
+                        opportunityRepository.findById(id);
+                    } catch (Exception e) {
+                        System.out.println("No records found.");
+                    }
+                }
 
-                case "lookup account" -> Account.lookUpAccount(id);
+                case "lookup account" -> {
+                    if (accountRepository.findById(id).isPresent()) {
+                        accountRepository.findById(id);
+                    }
+                    System.out.println("No records found.");
+                }
 
                 case "convert" -> Lead.convertID(id);
 
@@ -120,9 +156,9 @@ public class Menu {
 
                  */
 
-/*
-                // ======================== BY SALES REP =======================================
 
+                // ======================== BY SALES REP =======================================
+/*
                 case "report lead by salesrep" -> {
                     try{
                         salesRepRepository.countAllLeadsBySalesRep();
@@ -390,7 +426,7 @@ public class Menu {
 */
                 // ======================== HELP =======================================
 
-                case "help" -> System.out.println("List of available commands:\n- New Lead\n- Show Leads/SalesReps/Opportunities/Accounts\n" +
+                case "help" -> System.out.println("List of available commands:\n- New SalesRep\n- New Lead\n- Show SalesReps/Leads/Opportunities/Accounts\n" +
                         "- Lookup Lead/Opportunity/Account ID\n- Convert ID\n- Close Lost/Won ID\n- Help Reports/States\n- Help\n- Exit");
                 case "help reports" -> {
                     System.out.println("====INSERT ONE OPTION LISTED BELOW IN THE RESPECTIVE COMMAND====\n- Opportunity\n- CLOSED-LOST\n- CLOSED-WON\n- OPEN\n");
@@ -423,6 +459,7 @@ public class Menu {
         }
     }
 }
+
 
 
 

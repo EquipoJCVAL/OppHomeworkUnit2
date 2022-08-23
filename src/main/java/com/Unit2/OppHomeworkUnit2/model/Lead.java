@@ -79,9 +79,9 @@ public class Lead {
                 System.out.println("Please input the new Lead's company name");
                 String leadCompany = sc.nextLine();
 
-
+                SalesRep salesrep = new SalesRep();
                 //once all the parameters are valid, we simply create the Lead.
-                Lead newLead = new Lead(leadName, leadPhone, leadEmail, leadCompany, leadSalesRep);
+                Lead newLead = new Lead(leadName, leadPhone, leadEmail, leadCompany, salesrep);
 
                 leadList.add(newLead);
     }
@@ -174,11 +174,10 @@ public class Lead {
                             }
                         }
                         //Creates a new Contact with the Lead's data, adds it and Opportunity in the respective lists
-                        Contact contact = new Contact(leadList.get(i).getName(), leadList.get(i).getPhoneNumber(), leadList.get(i).getEmail(), leadList.get(i).getCompanyName(), leadList.get(i).getAccountContact());
-                        contactList.add(contact);
-                        Opportunity opportunity = new Opportunity(product, truckNum, contact, Status.OPEN);
-                        Opportunity.opportunitiesList.add(opportunity);
-                        opportunityList.add(opportunity);
+
+
+
+
 
                     } catch (InputMismatchException e) {
                         System.out.println("Please, insert a proper kind of data for each field.\n");

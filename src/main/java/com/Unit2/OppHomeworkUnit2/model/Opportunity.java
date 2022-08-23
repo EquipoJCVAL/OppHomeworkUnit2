@@ -11,7 +11,9 @@ import java.util.List;
 public class Opportunity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Enumerated(EnumType.STRING)
     private Product product;
     private int quantity;
     @ManyToOne

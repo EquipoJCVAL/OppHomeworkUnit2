@@ -17,7 +17,7 @@ public class Contact {
 
     private String companyName;
     @ManyToOne
-    private static Account accountContact;
+    private Account accountContact;
 
     //constructors
     public Contact(){

@@ -12,6 +12,7 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Enumerated(EnumType.STRING)
     private Industry industry;
     private int employeeCount;
     private String city;
