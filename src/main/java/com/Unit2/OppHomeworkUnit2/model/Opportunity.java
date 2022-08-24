@@ -2,6 +2,7 @@ package com.Unit2.OppHomeworkUnit2.model;
 
 import com.Unit2.OppHomeworkUnit2.model.Enums.Product;
 import com.Unit2.OppHomeworkUnit2.model.Enums.Status;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,16 +14,18 @@ public class Opportunity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Enumerated(EnumType.STRING)
+
     private Product product;
     private int quantity;
     @ManyToOne
     @JoinColumn(name = "decision_maker_id")
     private Contact decisionMaker;
     @ManyToOne
+    @JsonIgnore
     private Account accountOpportunity;
     @ManyToOne
     private SalesRep salesRepOpportunity;
+
     private Status status;
 
 
@@ -39,6 +42,12 @@ public class Opportunity {
         this.status = status;
         this.accountOpportunity = accountOpportunity;
         this.salesRepOpportunity = salesRepOpportunity;
+    }
+    @Override
+    public String toString() {
+        return String.format(
+                "Opportunity [Id=%d, Product='%s', DecisionMaker='%s', Status='%s', AccountId='%s', SalesRep='%s']",
+                id, product, decisionMaker.getName(), status, accountOpportunity.getId(), salesRepOpportunity.getName());
     }
 
     public static void closeLost(Long id) throws ClassNotFoundException {
@@ -166,6 +175,9 @@ public class Opportunity {
         Opportunity.opportunitiesList = opportunitiesList;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
 
 

@@ -9,6 +9,7 @@ import java.awt.*;
 
 @Repository
 public interface OpportunityRepository extends JpaRepository<Opportunity, Long> {
+
     // QUANTITY STATES
     @Query("SELECT AVG(quantity) FROM Opportunity")
     Integer findAverageOfQuantity();
@@ -84,5 +85,19 @@ public interface OpportunityRepository extends JpaRepository<Opportunity, Long> 
 
     @Query(value = "SELECT MIN(count) as minimum FROM (SELECT COUNT(account_opportunity_id) as count FROM opportunity GROUP BY account_opportunity_id) as result", nativeQuery = true)
     Integer findMinPerAccount();
+
+    // REPORT BY PRODUCT
+
+    @Query(nativeQuery = true, value = "SELECT product, COUNT(id) AS opportunities FROM opportunity  GROUP BY product")
+    Integer findAllOpportunitiesByProduct();
+    @Query(nativeQuery = true, value = "SELECT product, status, COUNT(id) AS opportunities FROM opportunity  WHERE status = 1 GROUP BY product")
+    Integer findAllClosedLostByProduct();
+    @Query(nativeQuery = true, value = "SELECT product, status, COUNT(id) AS opportunities FROM opportunity  WHERE status = 2 GROUP BY product")
+    Integer findAllClosedWonByProduct();
+    @Query(nativeQuery = true, value = "SELECT product, status, COUNT(id) AS opportunities FROM opportunity  WHERE status = 3 GROUP BY product")
+    Integer findAllOpenByProduct();
+
+
+
 }
 

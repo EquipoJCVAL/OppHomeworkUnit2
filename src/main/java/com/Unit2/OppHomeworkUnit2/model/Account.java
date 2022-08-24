@@ -1,6 +1,7 @@
 package com.Unit2.OppHomeworkUnit2.model;
 
 import com.Unit2.OppHomeworkUnit2.model.Enums.Industry;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,15 +12,17 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @Enumerated(EnumType.STRING)
+    private Long id;
+
     private Industry industry;
     private int employeeCount;
     private String city;
     private String country;
     @OneToMany (mappedBy = "accountContact")
+
     private List<Contact> contactList;
     @OneToMany (mappedBy = "accountOpportunity")
+
     private List<Opportunity> opportunityList;
 
 
@@ -57,7 +60,7 @@ public class Account {
     public static void lookUpAccount(Long id){
         //we search the ID on the list of accounts in the system, to check if we find it and we can print the information
             for (int i = 0; i < accountsList.size(); i++) {
-                Integer leadID = accountsList.get(i).getId();
+                Long leadID = accountsList.get(i).getId();
                 if (leadID.equals(id)) {
 
                     System.out.println(
@@ -70,8 +73,16 @@ public class Account {
             }
         }
 
+    @Override
+    public String toString() {
+        return String.format(
+                "Account [Id=%d, Industry='%s', EmployeeCount='%d', City='%s', Country='%s']",
+                id, industry, employeeCount, city, country);
+    }
+
+
     //getters
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -124,5 +135,17 @@ public class Account {
 
     public void setOpportunityList(List<Opportunity> opportunityList) {
         this.opportunityList = opportunityList;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public static List<Account> getAccountsList() {
+        return accountsList;
+    }
+
+    public static void setAccountsList(List<Account> accountsList) {
+        Account.accountsList = accountsList;
     }
 }

@@ -9,17 +9,8 @@ import java.util.Scanner;
 import com.Unit2.OppHomeworkUnit2.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
+/*
 public class Menu {
-    @Autowired
-    static AccountRepository accountRepository;
-    @Autowired
-    static OpportunityRepository opportunityRepository;
-    @Autowired
-    static LeadRepository leadRepository;
-    @Autowired
-    static SalesRepRepository salesRepRepository;
-
 
 
     public static void start() throws ClassNotFoundException {
@@ -423,7 +414,7 @@ public class Menu {
                     }
 
 
-*/
+
                 // ======================== HELP =======================================
 
                 case "help" -> System.out.println("List of available commands:\n- New SalesRep\n- New Lead\n- Show SalesReps/Leads/Opportunities/Accounts\n" +
@@ -457,9 +448,12 @@ public class Menu {
                 }
             }
         }
-    }
-}
 
+    }
+
+
+}
+*/
 
 
 

@@ -252,6 +252,12 @@ public class Lead {
             System.out.println("This Id doesn't match with any Lead, it could have been already converted into a Opportunity, you can verify typing 'Show Opportunities' in the main Menu, otherwise try again with the correct Id.");
         }
     }
+    @Override
+    public String toString() {
+        return String.format(
+                "Lead [Id=%d, Name='%s', PhoneNumber='%s', Email='%s', CompanyName='%s', SalesRep='%s']",
+                id, name, phoneNumber, email, companyName, salesRepLead.getName());
+    }
 
 
     //getters

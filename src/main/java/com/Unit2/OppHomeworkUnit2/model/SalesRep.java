@@ -24,6 +24,13 @@ public class SalesRep {
         this.name = name;
     }
 
+    @Override
+    public String toString() {
+        return String.format(
+                "SalesRep[Id=%d, Name='%s']",
+                id, name);
+    }
+
 
     //getters
     public String getName() {

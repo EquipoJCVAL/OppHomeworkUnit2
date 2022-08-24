@@ -11,6 +11,7 @@ import java.util.List;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
+
     // EMPLOYEE COUNT STATES
     @Query("SELECT AVG(employeeCount) FROM Account")
     Integer findAverageOfEmployeeCount();
@@ -29,29 +30,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     Integer findMinOfEmployeeCount();
 
 
-    // OPPORTUNITIES BY CITY
 
-    @Query(nativeQuery = true, value = "SELECT account.country, COUNT(account.country) AS opportunities FROM opportunity JOIN account ON opportunity.account_opportunity_id = account.id GROUP BY account.country")
-    Integer countAllOpportunitiesByCity();
-    @Query(nativeQuery = true, value = "    SELECT account.country, COUNT(account.country) AS close_lost_opp FROM opportunity JOIN account ON opportunity.account_opportunity_id = account.id WHERE opportunity.status = 3 GROUP BY account.country")
-    Integer countAllClosedWonByCity();
-    @Query(nativeQuery = true, value = "SELECT account.country, COUNT(account.country) AS close_won_opp FROM opportunity JOIN account ON opportunity.account_opportunity_id = account.id WHERE opportunity.status = 2 GROUP BY account.country")
-    Integer countAllClosedLostByCity();
-    @Query(nativeQuery = true, value = "SELECT account.country, COUNT(account.country) AS close_won_opp FROM opportunity JOIN account ON opportunity.account_opportunity_id = account.id WHERE opportunity.status = 1 GROUP BY account.country")
-    Integer countAllOpenByCity();
-
-
-
-    // OPPORTUNITIES BY INDUSTRY
-
-    @Query(nativeQuery = true, value = "SELECT account.industry, COUNT(account.industry) AS opportunities FROM opportunity JOIN account ON opportunity.account_opportunity_id = account.id GROUP BY account.industry")
-    Integer countAllByIndustry();
-    @Query(nativeQuery = true, value = "SELECT account.industry, COUNT(account.industry) AS close_lost_opp FROM opportunity JOIN account ON opportunity.account_opportunity_id = account.id WHERE opportunity.status = 3 GROUP BY account.industry")
-    Integer countAllClosedWonByIndustry();
-    @Query(nativeQuery = true, value = "SELECT account.industry, COUNT(account.industry) AS close_won_opp FROM opportunity JOIN account ON opportunity.account_opportunity_id = account.id WHERE opportunity.status = 2 GROUP BY account.industry")
-    Integer countAllClosedLostByIndustry();
-    @Query(nativeQuery = true, value = "SELECT account.industry, COUNT(account.industry) AS close_won_opp FROM opportunity JOIN account ON opportunity.account_opportunity_id = account.id WHERE opportunity.status = 1 GROUP BY account.industry")
-    Integer countAllOpenByIndustry();
 
 
 
