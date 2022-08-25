@@ -2,21 +2,15 @@
 
 package com.Unit2.OppHomeworkUnit2;
 
-
-import com.Unit2.OppHomeworkUnit2.model.Account;
 import com.Unit2.OppHomeworkUnit2.model.Lead;
 import com.Unit2.OppHomeworkUnit2.model.Opportunity;
-import com.Unit2.OppHomeworkUnit2.model.SalesRep;
 import com.Unit2.OppHomeworkUnit2.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.context.annotation.Bean;
-
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -25,12 +19,13 @@ import java.util.Scanner;
 @SpringBootApplication
 public class OppHomeworkUnit2Application{
 
-//    private static final Logger log = LoggerFactory.getLogger(OppHomeworkUnit2Application.class);
+    private static final Logger log = LoggerFactory.getLogger(OppHomeworkUnit2Application.class);
 
 	public static void main(String[] args) throws ClassNotFoundException {
 		SpringApplication.run(OppHomeworkUnit2Application.class);
 
 	}
+
 	@Bean
 	public CommandLineRunner demo(AccountRepository accountRepository, OpportunityRepository opportunityRepository, LeadRepository leadRepository, SalesRepRepository salesRepRepository) {
 		return (args) -> {
@@ -90,60 +85,10 @@ public class OppHomeworkUnit2Application{
 
 				//Dependiendo de el comand introducido el switch llamara a los metodos que corresponden segun su comando
 				switch (command) {
+
 					case "new salesrep" -> System.out.println();
 
-					case "show salesreps" -> {
-						for (SalesRep s : salesRepRepository.findAll()) {
-							if (s != null) {
-								System.out.println(s.toString());
-							}
-
-						}
-					}
 					case "new lead" -> Lead.newLead();
-
-					case "show leads" -> {
-						for (Lead l : leadRepository.findAll()) {
-							if (l != null) {
-								System.out.println(l.toString());
-							}
-						}
-					}
-					case "show opportunities" -> {
-
-						for (Opportunity o : opportunityRepository.findAll()) {
-							if (o != null) {
-								System.out.println(o.toString());
-							}
-						}
-					}
-
-						case "show accounts" -> {
-
-							for (Account a : accountRepository.findAll()) {
-								if (a != null) {
-									System.out.println(a.toString());
-								}
-							}
-						}
-
-					case "lookup lead" -> {
-						if (leadRepository.findById(id).isPresent()) {
-							System.out.println(leadRepository.findById(id).get());
-						}
-					}
-
-					case "lookup opportunity" -> {
-						if (opportunityRepository.findById(id).isPresent()) {
-							System.out.println(opportunityRepository.findById(id).get());
-						}
-					}
-
-					case "lookup account" -> {
-						if (accountRepository.findById(id).isPresent()) {
-							System.out.println(accountRepository.findById(id).get());
-						}
-					}
 
 					case "convert" -> Lead.convertID(id);
 
@@ -163,111 +108,221 @@ public class OppHomeworkUnit2Application{
 
                  */
 
-/*
+					// ======================== FIND ALL =======================================
+
+					case "show salesreps" -> {
+						salesRepRepository.findAll().forEach(salesRep -> {
+							if (salesRep != null) System.out.println(salesRep.toString());
+						});
+					}
+
+					case "show leads" -> {
+						leadRepository.findAll().forEach(lead -> {
+							if (lead != null) System.out.println(lead.toString());
+						});
+					}
+
+					case "show opportunities" -> {
+						opportunityRepository.findAll().forEach(opp -> {
+							if (opp != null) System.out.println(opp.toString());
+						});
+					}
+
+					case "show accounts" -> {
+						accountRepository.findAll().forEach(acc -> {
+							if (acc != null) System.out.println(acc.toString());
+						});
+					}
+
+					// ======================== FIND BY ID =======================================
+
+					case "lookup lead" -> {
+						if (leadRepository.findById(id).isPresent()) {
+							System.out.println(leadRepository.findById(id).get());
+						}
+					}
+
+					case "lookup opportunity" -> {
+						if (opportunityRepository.findById(id).isPresent()) {
+							System.out.println(opportunityRepository.findById(id).get());
+						}
+					}
+
+					case "lookup account" -> {
+						if (accountRepository.findById(id).isPresent()) {
+							System.out.println(accountRepository.findById(id).get());
+						}
+					}
+
+
+
 					// ======================== BY SALES REP =======================================
 
-                case "report lead by salesrep" -> salesRepRepository.countAllLeadsBySalesRep();
+					/*
+					case "report lead by salesrep" -> salesRepRepository.countAllLeadsBySalesRep();
 
-                case "report opportunity by salesrep" -> salesRepRepository.countAllOpportunitiesBySalesRep();
+					case "report opportunity by salesrep" -> salesRepRepository.countAllOpportunitiesBySalesRep();
 
-                case "report closed-won by salesrep" -> salesRepRepository.countAllClosedWonBySalesRep();
+					case "report closed-won by salesrep" -> salesRepRepository.countAllClosedWonBySalesRep();
 
-                case "report closed-lost by salesrep" -> salesRepRepository.countAllClosedLostBySalesRep();
+					case "report closed-lost by salesrep" -> salesRepRepository.countAllClosedLostBySalesRep();
 
-                case "report open by salesrep" -> salesRepRepository.countAllOpenBySalesRep();
+					case "report open by salesrep" -> salesRepRepository.countAllOpenBySalesRep();
 
- */
+					 */
 
-                // ======================== BY PRODUCT =======================================
+					// ======================== BY PRODUCT =======================================
 
-                case "report opportunity by the product" ->
-                        opportunityRepository.findAllOpportunitiesByProduct();
+					case "report opportunity by the product" -> {
+						for(int i = 0; i < opportunityRepository.findAllOpportunitiesByProduct().length; i++){
+							System.out.println(opportunityRepository.findAllOpportunitiesByProduct()[i]);
+						}
+					}
 
-                case "report closed-won by the product" ->
-                        opportunityRepository.findAllClosedWonByProduct();
+					case "report closed-won by the product" -> {
+						for(int i = 0; i < opportunityRepository.findAllClosedWonByProduct().length; i++){
+							System.out.println(opportunityRepository.findAllClosedWonByProduct()[i]);
+						}
+					}
 
-                case "report closed-lost by the product" ->
-                        opportunityRepository.findAllClosedLostByProduct();
+					case "report closed-lost by the product" -> {
+						for(int i = 0; i < opportunityRepository.findAllClosedLostByProduct().length; i++){
+							System.out.println(opportunityRepository.findAllClosedLostByProduct()[i]);
+						}
+					}
 
-                case "report open by the product" ->
-                        opportunityRepository.findAllOpenByProduct();
+					case "report open by the product" -> {
+						for(int i = 0; i < opportunityRepository.findAllOpenByProduct().length; i++){
+							System.out.println(opportunityRepository.findAllOpenByProduct()[i]);
+						}
+					}
 
-                // ======================== BY COUNTRY =======================================
+					// ======================== BY COUNTRY =======================================
 
-                case "report opportunity by Country" -> System.out.println("Number of Opportunities: " + opportunityRepository.countAllOpportunitiesByCountry());
+					case "report opportunity by country" -> {
+						for(int i = 0; i < opportunityRepository.countAllOpportunitiesByCountry().length; i++){
+							System.out.println(opportunityRepository.countAllOpportunitiesByCountry()[i]);
+						}
+					}
 
-                case "report closed-won by Country" -> System.out.println("Number of Closed-Won Opportunities: " + opportunityRepository.countAllClosedWonByCountry());
+					case "report closed-won by country" -> {
+						for(int i = 0; i < opportunityRepository.countAllClosedWonByCountry().length; i++){
+							System.out.println(opportunityRepository.countAllClosedWonByCountry()[i]);
+						}
+					}
 
-                case "report closed-lost by Country" -> System.out.println("Number of Closed-Lost Opportunities: " + opportunityRepository.countAllClosedLostByCountry());
+					case "report closed-lost by country" -> {
+						for(int i = 0; i < opportunityRepository.countAllClosedLostByCountry().length; i++){
+								System.out.println(opportunityRepository.countAllClosedLostByCountry()[i]);
+						}
+					}
 
-                case "report open by Country" -> System.out.println("Number of Opened Opportunities: " + opportunityRepository.countAllOpenByCountry());
-
-
-                // ======================== BY CITY =======================================
-
-                case "report opportunity by city" -> System.out.println(opportunityRepository.countAllOpportunitiesByCity());
-
-                case "report closed-won by city" ->System.out.println(opportunityRepository.countAllClosedWonByCity());
-
-
-                case "report closed-lost by city" -> System.out.println(opportunityRepository.countAllClosedLostByCity());
-
-                case "report open by city" -> System.out.println(opportunityRepository.countAllOpenByCity());
-
-
-                // ======================== BY INDUSTRY =======================================
-
-                case "report opportunity by industry" -> System.out.println(opportunityRepository.countAllByIndustry());
-
-                case "report closed-won by industry" -> System.out.println(opportunityRepository.countAllClosedWonByIndustry());
-
-                case "report closed-lost by industry" -> System.out.println(opportunityRepository.countAllClosedLostByIndustry());
-
-                case "report open by industry" -> System.out.println(opportunityRepository.countAllOpenByIndustry());
-
-
-
-                /*
-                                ███████ ████████  █████  ████████ ███████ ███████
-                                ██         ██    ██   ██    ██    ██      ██
-                                ███████    ██    ███████    ██    █████   ███████
-                                     ██    ██    ██   ██    ██    ██           ██
-                                ███████    ██    ██   ██    ██    ███████ ███████
+					case "report open by country" -> {
+						for(int i = 0; i < opportunityRepository.countAllOpenByCountry().length; i++){
+								System.out.println(opportunityRepository.countAllOpenByCountry()[i]);
+						}
+					}
 
 
-                 */
 
-                // ======================== EMPLOYEE COUNT STATES =======================================
+						// ======================== BY CITY =======================================
 
-                case "mean employeecount" -> System.out.println("Mean Employee Count: " + accountRepository.findAverageOfEmployeeCount());
-
-                case "median employeecount" -> System.out.println("Median Employee Count: " + accountRepository.findMedianOfEmployeeCount());
-
-                case "max employeecount" -> System.out.println("Max Employee Count: " + accountRepository.findMaxOfEmployeeCount());
-
-                case "min employeecount" -> System.out.println("Min Employee Count: " + accountRepository.findMinOfEmployeeCount());
+					case "report opportunity by city" -> {
+						for(int i = 0; i < opportunityRepository.countAllOpportunitiesByCity().length; i++){
+							System.out.println(opportunityRepository.countAllOpportunitiesByCity()[i]);
+						}
+					}
 
 
-                // ======================== QUANTITY STATES =======================================
-
-                case "Mean quantity" -> System.out.println("Mean Quantity: " + opportunityRepository.findAverageOfQuantity());
-
-                case "median quantity" -> System.out.println("Median Quantity: " + opportunityRepository.findMedianOfQuantity());
-
-                case "max quantity" -> System.out.println("Max Quantity: " + opportunityRepository.findMaxOfQuantity());
-
-                case "min quantity" -> System.out.println("Min Quantity: " + opportunityRepository.findMinOfQuantity());
+					case "report closed-won by city" ->{
+						for(int i = 0; i < opportunityRepository.countAllClosedWonByCity().length; i++){
+							System.out.println(opportunityRepository.countAllClosedWonByCity()[i]);
+						}
+					}
 
 
-                // ======================== OPPORTUNITY STATES =======================================
+					case "report closed-lost by city" -> {
+						for(int i = 0; i < opportunityRepository.countAllClosedLostByCity().length; i++){
+							System.out.println(opportunityRepository.countAllClosedLostByCity()[i]);
+						}
+					}
 
-					case "mean opps per account" -> System.out.println("Mean Opportunity per Account: " + opportunityRepository.findMinOfQuantity());
+					case "report open by city" -> {
+						for(int i = 0; i < opportunityRepository.countAllOpenByCity().length; i++){
+							System.out.println(opportunityRepository.countAllOpenByCity()[i]);
+						}
+					}
 
-                    case "median opps per account" -> System.out.println("Median Opportunity per Account: " + opportunityRepository.findMinOfQuantity());
 
-                    case "max opps per account" -> System.out.println("Max Opportunity per Account: " + opportunityRepository.findMinOfQuantity());
+					// ======================== BY INDUSTRY =======================================
 
-                    case "min opps per account" -> System.out.println("Min Opportunity per Account: " + opportunityRepository.findMinOfQuantity());
+					case "report opportunity by industry" -> {
+						for(int i = 0; i < opportunityRepository.countAllOpenByIndustry().length; i++){
+							System.out.println(opportunityRepository.countAllByIndustry()[i]);
+						}
+					}
+
+					case "report closed-won by industry" -> {
+						for(int i = 0; i < opportunityRepository.countAllClosedWonByIndustry().length; i++){
+							System.out.println(opportunityRepository.countAllClosedWonByIndustry()[i]);
+						}
+					}
+
+					case "report closed-lost by industry" -> {
+						for(int i = 0; i < opportunityRepository.countAllClosedLostByIndustry().length; i++){
+							System.out.println(opportunityRepository.countAllClosedLostByIndustry()[i]);
+						}
+					}
+
+					case "report open by industry" -> {
+						for(int i = 0; i < opportunityRepository.countAllOpenByIndustry().length; i++){
+							System.out.println(opportunityRepository.countAllOpenByIndustry()[i]);
+						}
+					}
+
+
+
+					/*
+									███████ ████████  █████  ████████ ███████ ███████
+									██         ██    ██   ██    ██    ██      ██
+									███████    ██    ███████    ██    █████   ███████
+										 ██    ██    ██   ██    ██    ██           ██
+									███████    ██    ██   ██    ██    ███████ ███████
+
+
+					 */
+
+					// ======================== EMPLOYEE COUNT STATES =======================================
+
+					case "mean employeecount" -> System.out.println("Mean Employee Count: " + accountRepository.findAverageOfEmployeeCount());
+
+					case "median employeecount" -> System.out.println("Median Employee Count: " + accountRepository.findMedianOfEmployeeCount());
+
+					case "max employeecount" -> System.out.println("Max Employee Count: " + accountRepository.findMaxOfEmployeeCount());
+
+					case "min employeecount" -> System.out.println("Min Employee Count: " + accountRepository.findMinOfEmployeeCount());
+
+
+					// ======================== QUANTITY STATES =======================================
+
+					case "mean quantity" -> System.out.println("Mean Quantity: " + opportunityRepository.findAverageOfQuantity());
+
+					case "median quantity" -> System.out.println("Median Quantity: " + opportunityRepository.findMedianOfQuantity());
+
+					case "max quantity" -> System.out.println("Max Quantity: " + opportunityRepository.findMaxOfQuantity());
+
+					case "min quantity" -> System.out.println("Min Quantity: " + opportunityRepository.findMinOfQuantity());
+
+				// ======================== OPPORTUNITY STATES =======================================
+
+					case "mean opps per account" -> System.out.println("Mean Opportunity per Account: " + opportunityRepository.findAveragePerAccount());
+
+//					case "median opps per account" -> System.out.println("Median Opportunity per Account: " + opportunityRepository.findMedianPerAccount());
+
+					case "max opps per account" -> System.out.println("Max Opportunity per Account: " + opportunityRepository.findMaxPerAccount());
+
+					case "min opps per account" -> System.out.println("Min Opportunity per Account: " + opportunityRepository.findMinPerAccount());
+
 
 
 					// ======================== HELP =======================================
@@ -298,13 +353,22 @@ public class OppHomeworkUnit2Application{
 					case "EXCEPTION" -> System.err.println("Invalid Id number.");
 
 					default -> {
-						if (!command.equals("exit")) System.out.println("The Command doesn't exist, try again");
+						if (!command.equals("exit") && !command.equals("")) System.out.println("The Command doesn't exist, try again");
 
 					}
 
 				}
+
+
+
+
 			}
+
+
 		};
+
+
 	}
+
 }
 

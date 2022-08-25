@@ -14,24 +14,18 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     // EMPLOYEE COUNT STATES
     @Query("SELECT AVG(employeeCount) FROM Account")
-    Integer findAverageOfEmployeeCount();
+    Double findAverageOfEmployeeCount();
 
-    @Query(value = "SELECT AVG(dd.employee_count) as median_val FROM" +
-            " (SELECT d.employee_count, @rownum=@rownum+1 as 'row_number', " +
-            "@total_rows=@rownum FROM Accounts d, (SELECT @rownum=0) r " +
-            "WHERE d.employee_count is NOT NULL ORDER BY d.employee_count) as dd " +
+    @Query(value = "SELECT AVG(dd.employee_count) as median_val FROM " +
+            "(SELECT d.employee_count, @rownum\\:=@rownum+1 as 'row_number', @total_rows\\:=@rownum FROM account d, " +
+            "(SELECT @rownum\\:=0) r WHERE d.employee_count is NOT NULL ORDER BY d.employee_count) as dd " +
             "WHERE dd.row_number IN ( FLOOR((@total_rows+1)/2), FLOOR((@total_rows+2)/2) )", nativeQuery = true)
-    Integer findMedianOfEmployeeCount();
+    Double findMedianOfEmployeeCount();
 
     @Query("SELECT MAX(employeeCount) FROM Account")
     Integer findMaxOfEmployeeCount();
 
     @Query("SELECT MIN(employeeCount) FROM Account")
     Integer findMinOfEmployeeCount();
-
-
-
-
-
 
 }

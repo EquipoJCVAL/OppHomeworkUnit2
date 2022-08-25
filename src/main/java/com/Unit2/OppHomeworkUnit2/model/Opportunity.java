@@ -14,7 +14,7 @@ public class Opportunity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Enumerated(value = EnumType.STRING)
     private Product product;
     private int quantity;
     @ManyToOne
@@ -25,7 +25,7 @@ public class Opportunity {
     private Account accountOpportunity;
     @ManyToOne
     private SalesRep salesRepOpportunity;
-
+    @Enumerated(value = EnumType.STRING)
     private Status status;
 
 

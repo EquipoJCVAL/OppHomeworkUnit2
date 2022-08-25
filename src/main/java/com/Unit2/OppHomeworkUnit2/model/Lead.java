@@ -86,49 +86,6 @@ public class Lead {
                 leadList.add(newLead);
     }
 
-    public static void showLeads() {
-        //we check to see if the arraylist is empty, so we can display the proper message
-        if (leadList.size() == 0) {
-            System.out.println("Currently our systems don't have any Leads in the database");
-        }
-        //otherwise, we proceed to print out all of the leads in the system.
-        else {
-            for (int i = 0; i < leadList.size(); i++) {
-                System.out.println("Lead with ID: " + leadList.get(i).getId() + " \n Name: " + leadList.get(i).getName());
-                System.out.println("===");
-            }
-        }
-    }
-
-    public static void lookUpLead(Long id){
-        //we search the ID on the list of leads in the system, to check if we find it and we can print the information
-        boolean found = false;
-        for (int i = 0; i < leadList.size(); i++) {
-            Integer leadID = Math.toIntExact(leadList.get(i).getId());
-            if (leadID.equals(id)) {
-                System.out.println(
-                        "This ID corresponds to the Lead: " + leadList.get(i).getName() + " \n " +
-                                "Lead phone number: " + leadList.get(i).getPhoneNumber() + " \n" +
-                                "Lead Company: " + leadList.get(i).getCompanyName());
-                found = true;
-            } else {
-                //if the ID is not found in the leadsList, but it IS found in the list of old leads, the system
-                //will inform the user that the lead is no longer active, and is now an opportunity.
-                for (int j = 0; j < oldLeadList.size(); j++) {
-                    leadID = Math.toIntExact(leadList.get(i).getId());
-                    if (leadID.equals(id)) {
-                        System.out.println("The ID you introduced corresponds to a Lead that has became an Opportunity " +
-                                "and is no longer in our system");
-                        found = true;
-                    }
-                }
-            }
-        }
-        //and we have one last if to check if the ID is not found at all, and hence doesn't exist in the systems.
-        if (!found) {
-            System.out.println("The ID you introduced doesn't correspond to any Lead in our system.");
-        }
-    }
 
     public static void convertID(Long idNum) {
         String regex = "([A-Z][a-z]+([ ]?[a-z]?['-]?)*)+";
@@ -228,7 +185,6 @@ public class Lead {
 
                         //Creates a new Account and a list for Contact and Opportunity
                         Account account = new Account(industry, employees, city, country, contactList, opportunityList);
-                        Account.accountsList.add(account);
 
                         //Add Lead to another list and delete it from the current one
                         oldLeadList.add(leadList.get(i));

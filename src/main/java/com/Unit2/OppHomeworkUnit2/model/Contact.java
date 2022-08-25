@@ -23,7 +23,6 @@ public class Contact {
     public Contact(){
     }
 
-
     public Contact(String name, String phoneNumber, String email, String companyName, Account accountContact) {
         this.name = name;
         this.phoneNumber = phoneNumber;
