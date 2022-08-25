@@ -19,8 +19,6 @@ import java.util.Scanner;
 @SpringBootApplication
 public class OppHomeworkUnit2Application{
 
-    private static final Logger log = LoggerFactory.getLogger(OppHomeworkUnit2Application.class);
-
 	public static void main(String[] args) throws ClassNotFoundException {
 		SpringApplication.run(OppHomeworkUnit2Application.class);
 

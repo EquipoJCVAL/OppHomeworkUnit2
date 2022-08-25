@@ -88,7 +88,6 @@ public class OppHomeworkUnit2ApplicationTests {
 //        contactRepository.deleteAll();
 	}
 
-
 	// =============== EMPLOYEE COUNT STATES TESTS ===============
 
 	@Test
@@ -141,9 +140,8 @@ public class OppHomeworkUnit2ApplicationTests {
 	@Test
 	void countAllOpportunitiesByCountry() {
 
-		opportunityRepository.countAllOpportunitiesByCountry();
-	}
 
+	}
 
 
 }
