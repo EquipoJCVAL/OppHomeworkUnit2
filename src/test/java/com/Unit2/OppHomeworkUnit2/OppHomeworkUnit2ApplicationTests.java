@@ -62,13 +62,13 @@ public class OppHomeworkUnit2ApplicationTests {
 	Account account4 = new Account(Industry.MEDICAL, 13, "Helsinky", "Finland", contacts, opportunities);
 
 	// Contacts
-	Contact contact1 = new Contact("Pino Pinello", "1234 543 654", "pini@pinelli.com", "Pinello Company", account1);
-	Contact contact2 = new Contact("Barbara Letta", "989 345823 4329", "letta@lettata.com", "Latteria", account2);
+	Contact contact1 = new Contact("Pino Pinello", "1234 543 654", "pini@pinelli.com", "Pinello Company");
+	Contact contact2 = new Contact("Barbara Letta", "989 345823 4329", "letta@lettata.com", "Latteria");
 
 	// Opportunities
-	Opportunity opportunity1 = new Opportunity(Product.BOX, 43, contact1, Status.OPEN, account1, salesRep3);
-	Opportunity opportunity2 = new Opportunity(Product.HYBRID, 35, contact2, Status.CLOSED_LOST, account2, salesRep4);
-	Opportunity opportunity3 = new Opportunity(Product.FLATBED, 13, contact2, Status.CLOSED_WON, account2, salesRep4);
+	Opportunity opportunity1 = new Opportunity(Product.BOX, 43, contact1, Status.OPEN);
+	Opportunity opportunity2 = new Opportunity(Product.HYBRID, 35, contact2, Status.CLOSED_LOST);
+	Opportunity opportunity3 = new Opportunity(Product.FLATBED, 13, contact2, Status.CLOSED_WON);
 
 
 	@BeforeEach

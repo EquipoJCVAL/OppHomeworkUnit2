@@ -35,13 +35,11 @@ public class Opportunity {
     //constructor
     public Opportunity(){
     }
-    public Opportunity(Product product, int quantity, Contact decisionMaker, Status status, Account accountOpportunity, SalesRep salesRepOpportunity) {
+    public Opportunity(Product product, int quantity, Contact decisionMaker, Status status) {
         this.product = product;
         this.quantity = quantity;
         this.decisionMaker = decisionMaker;
         this.status = status;
-        this.accountOpportunity = accountOpportunity;
-        this.salesRepOpportunity = salesRepOpportunity;
     }
     @Override
     public String toString() {

@@ -3,6 +3,7 @@ package com.Unit2.OppHomeworkUnit2.model;
 import com.Unit2.OppHomeworkUnit2.model.Enums.Industry;
 import com.Unit2.OppHomeworkUnit2.model.Enums.Product;
 import com.Unit2.OppHomeworkUnit2.model.Enums.Status;
+import com.Unit2.OppHomeworkUnit2.repository.LeadRepository;
 
 import javax.persistence.*;
 import java.util.*;
@@ -34,7 +35,6 @@ public class Lead {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.companyName = companyName;
-        this.id = id;
         this.salesRepLead = salesRepLead;
     }
 
@@ -49,7 +49,13 @@ public class Lead {
     //and recieve that the lead with that ID is no longer in the system, aswell as a separate message if that ID doesn't exist/was never in the system.
     static ArrayList<Lead> oldLeadList = new ArrayList<Lead>();
 
+
+
+
     public static void newLead() {
+
+
+        //LeadRepository leadRepository;
 
         //With this method we simply call the Scanner so that we can get the 4 parameters to create a new lead.
         //And then test if they are valid matching them with the existing Regex variables.
@@ -83,12 +89,15 @@ public class Lead {
                 //once all the parameters are valid, we simply create the Lead.
                 Lead newLead = new Lead(leadName, leadPhone, leadEmail, leadCompany, salesrep);
 
+                //leadRepository.save(newLead);
                 leadList.add(newLead);
+
     }
 
 
     public static void convertID(Long idNum) {
-        String regex = "([A-Z][a-z]+([ ]?[a-z]?['-]?)*)+";
+        String wordRegex = "([A-Z][a-z]+([ ]?[a-z]?['-]?)*)+";
+        String numRegex = "[^a-z ]*([.0-9])*\\d";
 
         Scanner input = new Scanner(System.in);
         boolean found = false;
@@ -100,21 +109,34 @@ public class Lead {
         //Since it's a long process, this allows the user to interrupt it from the beginning
         System.out.println("Press Enter to process the conversion or type 'exit' to quit.");
         String exit = input.nextLine();
+        while(!found) {
 
-        for (int i = 0; i < leadList.size(); i++) {
-            if (leadList.get(i).getId() == idNum) {
+            for (int i = 0; i < leadList.size(); i++) {
+                if (leadList.get(i).getId() == idNum) {
 
-                found = true;
+                    found = true;
 
-                while (!Objects.equals(exit, "exit")) {
-                    try {
+                    while (!Objects.equals(exit, "exit")) {
 
                         // Collect Opportunity parameters - number of trucks and product
                         System.out.println("Fill in the following fields.");
                         System.out.println("Number of trucks: ");
-                        int truckNum = input.nextInt();
+                        String truckString = input.nextLine();
+
+                        if (!truckString.matches(numRegex)) {
+                            System.out.println("The introduced value is not valid, please introduce a valid value.");
+                            truckString = input.nextLine();
+                        }
+                        int truckNum = Integer.parseInt(truckString);
+
                         System.out.println("Select the product (insert the number)\n1 - BOX\n2 - FLATBED\n3 - HYBRID");
-                        int chosenOne = input.nextInt();
+                        String chosenOneStr = input.nextLine();
+                        if (!chosenOneStr.matches(numRegex)) {
+                            System.out.println("the introduced value is not valid, please try again.");
+                            System.out.println("Select the product (insert the number)\n1 - BOX\n2 - FLATBED\n3 - HYBRID");
+                            chosenOneStr = input.nextLine();
+                        }
+                        int chosenOne = Integer.parseInt(chosenOneStr);
 
                         Product product = null;
                         while (product == null) {
@@ -126,30 +148,28 @@ public class Lead {
                                 case 3 -> product = Product.HYBRID;
                                 default -> {
                                     System.out.println("Invalid number, try again.");
-                                    chosenOne = input.nextInt();
+                                    chosenOneStr = input.nextLine();
+                                    if (!chosenOneStr.matches(numRegex)) {
+                                        System.out.println("Invalid number, try again.");
+                                        chosenOneStr = input.nextLine();
+                                    }
+                                    chosenOne = Integer.parseInt(chosenOneStr);
                                 }
                             }
                         }
                         //Creates a new Contact with the Lead's data, adds it and Opportunity in the respective lists
+                        Lead lead = leadList.get(i);
+                        Contact contact = new Contact(lead.getName(), lead.getPhoneNumber(), lead.getEmail(), lead.getCompanyName());
+                        Opportunity opportunity = new Opportunity(product, truckNum, contact, Status.OPEN);
+                        opportunity.setSalesRepOpportunity(lead.getSalesRepLead());
 
-
-
-
-
-                    } catch (InputMismatchException e) {
-                        System.out.println("Please, insert a proper kind of data for each field.\n");
-                        convertID(idNum);
-                        break;
-                    }
-
-                    try {
                         //Account info
                         input.nextLine();
                         System.out.println("Opportunity successfully created! To complete the process you must create an Account.");
                         System.out.println("City name: ");
                         String city = input.nextLine();
 
-                        while (!city.matches(regex)) {
+                        while (!city.matches(wordRegex)) {
                             System.out.println("Please, insert a valid city name capitalized (for example 'New York'): ");
                             city = input.nextLine();
                         }
@@ -157,28 +177,35 @@ public class Lead {
                         System.out.println("Country of the organization: ");
                         String country = input.nextLine();
 
-                        while (!country.matches(regex)) {
+                        while (!country.matches(wordRegex)) {
                             System.out.println("Please, insert a valid country name with the first letter capitalized: ");
                             country = input.nextLine();
                         }
 
                         System.out.println("Number of employees: ");
-                        int employees = input.nextInt();
+                        String employeeStr = input.nextLine();
+
+                        while (!employeeStr.matches(wordRegex)) {
+                            System.out.println("The value introduced is not a valid number, insert a valid value");
+                            employeeStr = input.nextLine();
+
+                        }
+                        int employees = Integer.parseInt(employeeStr);
 
                         System.out.println("Select the product (insert the number)\n1 - ECOMMERCE\n2 - MANUFACTURING\n3 - MEDICAL\n4 - PRODUCE\n5 - OTHER");
-                        int chosenTwo = input.nextInt();
+                        String chosenTwo = input.nextLine();
 
                         Industry industry = null;
                         while (industry == null) {
                             switch (chosenTwo) {
-                                case 1 -> industry = Industry.ECOMMERCE;
-                                case 2 -> industry = Industry.MANUFACTURING;
-                                case 3 -> industry = Industry.MEDICAL;
-                                case 4 -> industry = Industry.PRODUCE;
-                                case 5 -> industry = Industry.OTHER;
+                                case "1" -> industry = Industry.ECOMMERCE;
+                                case "2" -> industry = Industry.MANUFACTURING;
+                                case "3" -> industry = Industry.MEDICAL;
+                                case "4" -> industry = Industry.PRODUCE;
+                                case "5" -> industry = Industry.OTHER;
                                 default -> {
                                     System.out.println("Invalid number, try again.");
-                                    chosenTwo = input.nextInt();
+                                    chosenTwo = input.nextLine();
                                 }
                             }
                         }
@@ -189,20 +216,13 @@ public class Lead {
                         //Add Lead to another list and delete it from the current one
                         oldLeadList.add(leadList.get(i));
                         leadList.remove(leadList.get(i));
-                    } catch (InputMismatchException ex) {
-                        System.out.println("Invalid number, aborting process...\n");
-                        convertID(idNum);
 
-
-                    }
+                        }
                     System.out.println("Account Created!\n");
                     break;
                 }
-
             }
-
         }
-
         // ID not found
         if (!found && !exit.equals("exit")) {
             System.out.println("This Id doesn't match with any Lead, it could have been already converted into a Opportunity, you can verify typing 'Show Opportunities' in the main Menu, otherwise try again with the correct Id.");
@@ -245,18 +265,6 @@ public class Lead {
         return salesRepLead;
     }
 
-    public static String getNameRegex() {
-        return nameRegex;
-    }
-
-    public static String getPhoneRegex() {
-        return phoneRegex;
-    }
-
-    public static String getEmailRegex() {
-        return emailRegex;
-    }
-
     public static ArrayList<Lead> getLeadList() {
         return leadList;
     }
@@ -292,17 +300,7 @@ public class Lead {
         this.salesRepLead = salesRepLead;
     }
 
-    public static void setNameRegex(String nameRegex) {
-        Lead.nameRegex = nameRegex;
-    }
 
-    public static void setPhoneRegex(String phoneRegex) {
-        Lead.phoneRegex = phoneRegex;
-    }
-
-    public static void setEmailRegex(String emailRegex) {
-        Lead.emailRegex = emailRegex;
-    }
 
     public static void setLeadList(ArrayList<Lead> leadList) {
         Lead.leadList = leadList;

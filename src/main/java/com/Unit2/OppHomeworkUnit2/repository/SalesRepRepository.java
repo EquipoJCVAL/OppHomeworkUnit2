@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface SalesRepRepository extends JpaRepository<SalesRep, Long> {
 
+
+
 }
