@@ -155,16 +155,16 @@ public class OppHomeworkUnit2Application{
 
 					// ======================== BY SALES REP =======================================
 
-					/*
-					case "report lead by salesrep" -> salesRepRepository.countAllLeadsBySalesRep();
 
-					case "report opportunity by salesrep" -> salesRepRepository.countAllOpportunitiesBySalesRep();
+					case "report lead by salesrep" -> salesRepRepository.findLeadBySalesRep();
 
-					case "report closed-won by salesrep" -> salesRepRepository.countAllClosedWonBySalesRep();
+					case "report opportunity by salesrep" -> salesRepRepository.findOpportunityBySalesRep();
 
-					case "report closed-lost by salesrep" -> salesRepRepository.countAllClosedLostBySalesRep();
+					case "report closed-won by salesrep" -> salesRepRepository.findOpportunityBySalesRepAndStatusWon();
 
-					case "report open by salesrep" -> salesRepRepository.countAllOpenBySalesRep();
+					case "report closed-lost by salesrep" -> salesRepRepository.findOpportunityBySalesRepAndStatusLost();
+
+					case "report open by salesrep" -> salesRepRepository.findOpportunityBySalesRepAndStatusOpen();
 
 					 */
 
