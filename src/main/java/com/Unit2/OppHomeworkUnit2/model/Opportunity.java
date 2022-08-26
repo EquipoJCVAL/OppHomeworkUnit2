@@ -2,9 +2,9 @@ package com.Unit2.OppHomeworkUnit2.model;
 
 import com.Unit2.OppHomeworkUnit2.model.Enums.Product;
 import com.Unit2.OppHomeworkUnit2.model.Enums.Status;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,13 +12,21 @@ import java.util.List;
 public class Opportunity {
 
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Enumerated(value = EnumType.STRING)
     private Product product;
     private int quantity;
+    @ManyToOne
+    @JoinColumn(name = "decision_maker_id")
     private Contact decisionMaker;
+    @ManyToOne
+    @JsonIgnore
+    private Account accountOpportunity;
+    @ManyToOne
+    private SalesRep salesRepOpportunity;
+    @Enumerated(value = EnumType.STRING)
     private Status status;
-
-    private static int idCounter;
 
 
     public static List<Opportunity> opportunitiesList = new ArrayList<>();
@@ -27,14 +35,21 @@ public class Opportunity {
     //constructor
     public Opportunity(){
     }
-    public Opportunity(Product product, int quantity, Contact decisionMaker, Status status) {
+    public Opportunity(Product product, int quantity, Contact decisionMaker, Status status, Account account, SalesRep salesRep) {
         this.product = product;
         this.quantity = quantity;
         this.decisionMaker = decisionMaker;
         this.status = status;
     }
+    @Override
+    public String toString() {
+        return String.format(
+                "Opportunity [Id=%d, Product='%s', DecisionMaker='%s', Status='%s', AccountId='%s', SalesRep='%s']",
+                id, product, decisionMaker.getName(), status, accountOpportunity.getId(), salesRepOpportunity.getName());
+    }
 
-    public static void closeLost(int id) throws ClassNotFoundException {
+
+    public static void closeLost(Long id) throws ClassNotFoundException {
         boolean found = false;
         for (int i = 0; i < opportunitiesList.size(); i++) {
             if (opportunitiesList.get(i).getId() == id) {
@@ -48,7 +63,7 @@ public class Opportunity {
         }
     }
 
-    public static void closeWon(int id){
+    public static void closeWon(Long id){
         boolean found = false;
         for (int i = 0; i < opportunitiesList.size(); i++) {
             if (opportunitiesList.get(i).getId() == id) {
@@ -63,38 +78,9 @@ public class Opportunity {
     }
 
 
-    public static void showOpportunities() {
-        if (opportunitiesList.size() == 0) {
-            System.out.println("Currently our systems don't have any Opportunities in the database");
-        }
-        for (int i = 0; i < opportunitiesList.size(); i++) {
-            System.out.println("Opportunity with ID: " + opportunitiesList.get(i).getId() + "\n Product type: " + opportunitiesList.get(i).getProduct() + "\n Quantity of trucks: " + opportunitiesList.get(i).getQuantity());
-            System.out.println("===");
-        }
-    }
-
-    public static void lookUpOpportunity(int id) {
-        //we search the ID on the list of opportunities in the system, to check if we find it and we can print the information
-        if (opportunitiesList.size() == 0){
-            System.out.println("There are no Opportunities saved in our database.");
-        } else {
-            for (int i = 0; i < opportunitiesList.size(); i++) {
-                Integer leadID = opportunitiesList.get(i).getId();
-                if (leadID.equals(id)) {
-                    System.out.println(
-                            "This ID corresponds to the opportunity created by " + opportunitiesList.get(i).getDecisionMaker().getName() + "\n" +
-                                    "It's " + opportunitiesList.get(i).getQuantity() + "trucks of " + opportunitiesList.get(i).getProduct() + "products. \n" +
-                                    "It's current status is; " + opportunitiesList.get(i).getStatus());
-                } else {
-                    System.out.println("The ID you introduced doesn't correspond with any Opportunities in our database.");
-                }
-            }
-        }
-
-    }
 
     //getters
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -114,11 +100,21 @@ public class Opportunity {
         return status;
     }
 
+    public SalesRep getSalesRepOpportunity() {
+        return salesRepOpportunity;
+    }
+
+    public Account getAccountOpportunity() {
+        return accountOpportunity;
+    }
+
+    public static List<Opportunity> getOpportunitiesList() {
+        return opportunitiesList;
+    }
+
+
 
     //setters
-    public void setId(int id) {
-        this.id = idCounter++;
-    }
 
     public void setProduct(Product product) {
         this.product = product;
@@ -135,5 +131,28 @@ public class Opportunity {
     public void setStatus(Status status) {
         this.status = status;
     }
+
+    public void setAccountOpportunity(Account accountOpportunity) {
+        this.accountOpportunity = accountOpportunity;
+    }
+
+    public void setSalesRepOpportunity(SalesRep salesRepOpportunity) {
+        this.salesRepOpportunity = salesRepOpportunity;
+    }
+
+    public static void setOpportunitiesList(List<Opportunity> opportunitiesList) {
+        Opportunity.opportunitiesList = opportunitiesList;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
+
+
+
+
+
+
+
 

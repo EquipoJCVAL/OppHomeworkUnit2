@@ -1,0 +1,33 @@
+--USE opphomeworkunit2;
+--
+--INSERT INTO sales_rep (name) VALUES
+--("Marco"), ("Bill"), ("Jennifer"), ("Jonny"), ("Jackson");
+--
+--INSERT INTO lead_ (company_name, email, name, phone_number, sales_rep_lead_id) VALUE
+--("Sony", "testla@tesla.com", "Marco", "432 32 5433", 1),
+--("Apple", "apple@apple.com", "Bill", "543 438 2588", 2),
+--("Tesla", "sony@sony.com", "Jonny", "543 362 76", 4);
+--
+--INSERT INTO account (city, country, employee_count, industry) VALUES
+--("Paris", "France", "12", "PRODUCE"),
+--("london", "england", "43", "ECOMMERCE"),
+--("Berlin", "Germany", "45", "MANUFACTURING"),
+--("Rome", "Italy", "23", "MEDICAL"),
+--("Basel", "Switzerland", "32", "OTHER");
+--
+--
+--INSERT INTO contact (name, company_name, email, phone_number, account_contact_id) VALUES
+--("Jonny", "Tesla", "testla@tesla.com", "432 32 5433", 1),
+--("Jackson", "Miao", "miao@miao.com", "43890 59430 3", 2),
+--("Marco", "Sony", "sony@sony.com", "543 362 76", 3);
+--
+--
+--INSERT INTO opportunity (product, quantity, status, account_opportunity_id, decision_maker_id, sales_rep_opportunity_id) VALUES
+--("FLATBED", 14, "OPEN", 1, 1, 4),
+--("BOX", 9, "CLOSED_LOST", 1, 1, 4),
+--("BOX", 3, "CLOSED_WON", 1, 1, 4),
+--("HYBRID", 10, "OPEN", 1, 2, 4),
+--("HYBRID", 43, "CLOSED_LOST", 1, 2, 3),
+--("FLATBED", 15, "CLOSED_WON", 2, 3, 1),
+--("FLATBED", 16, "OPEN", 3, 2, 3);
+

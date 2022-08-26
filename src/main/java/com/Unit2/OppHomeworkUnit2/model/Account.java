@@ -1,71 +1,117 @@
 package com.Unit2.OppHomeworkUnit2.model;
 
 import com.Unit2.OppHomeworkUnit2.model.Enums.Industry;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.yaml.snakeyaml.emitter.ScalarAnalysis;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 @Entity
 public class Account {
 
     @Id
-    int id;
-    Industry industry;
-    int employeeCount;
-    String city;
-    String country;
-    List<Contact> contactList;
-    List<Opportunity> opportunityList;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Enumerated(value = EnumType.STRING)
+    private Industry industry;
+    private int employeeCount;
+    private String city;
+    private String country;
+    @OneToMany(mappedBy = "accountContact")
 
-    int idCounter = 0;
+    private List<Contact> contactList;
+    @OneToMany(mappedBy = "accountOpportunity")
 
-    public static List<Account> accountsList = new ArrayList<>();
+    private List<Opportunity> opportunityList;
+
+    public Account() {
+
+    }
 
     //constructor
-    public Account(Industry industry, int employeeCount, String city, String country, List<Contact> contactList, List<Opportunity> opportunityList) {
+    public Account(Industry industry, int employeeCount, String city, String country) {
         this.industry = industry;
         this.employeeCount = employeeCount;
         this.city = city;
         this.country = country;
-        this.contactList = contactList;
-        this.opportunityList = opportunityList;
+
     }
 
 
-    public static void showAccounts() {
-        //we check to see if the arraylist is empty, so we can display the proper message
-        if (accountsList.size() == 0) {
-            System.out.println("Currently our systems don't have any Accounts in the database");
-        }
-        //otherwise, we proceed to print out all of the accounts in the system.
-        for (int i = 0; i < accountsList.size(); i++) {
-            System.out.println("Account with ID: " + accountsList.get(i).getId() + "\n" +
-                    accountsList.get(i).getIndustry() + " company based in: " + accountsList.get(i).getCity() + ", " +
-                    accountsList.get(i).getCountry() + "\n" + accountsList.get(i).getEmployeeCount() + " employees.");
-            System.out.println("===");
-        }
+    @Override
+    public String toString() {
+        return String.format(
+                "Account [Id=%d, Industry='%s', EmployeeCount='%d', City='%s', Country='%s']",
+                id, industry, employeeCount, city, country);
     }
 
-    public static void lookUpAccount(int id){
-        //we search the ID on the list of accounts in the system, to check if we find it and we can print the information
-            for (int i = 0; i < accountsList.size(); i++) {
-                Integer leadID = accountsList.get(i).getId();
-                if (leadID.equals(id)) {
+    public static Account createAccount() {
 
-                    System.out.println(
-                            "This ID corresponds to the account from a " + accountsList.get(i).getIndustry() +
-                            " company with " + accountsList.get(i).getEmployeeCount() + "employees. \n" +
-                            "It's based in " + accountsList.get(i).getCity() + ", " + accountsList.get(i).getCountry() + ".");
-                } else {
-                    System.out.println("The ID you introduced doesn't correspond with any Account in our database.");
+        Scanner sc = new Scanner(System.in);
+        String wordRegex = "([A-Z][a-z]+([ ]?[a-z]?['-]?)*)+";
+        String numRegex = "[^a-z ]*([.0-9])*\\d";
+
+        System.out.println("Fill in the following fields");
+        System.out.println("City name: ");
+        String city = sc.nextLine();
+
+        while (!city.matches(wordRegex)) {
+            System.out.println("Please, insert a valid city name capitalized (for example 'New York'): ");
+            city = sc.nextLine();
+        }
+
+        System.out.println("Country of the organization: ");
+        String country = sc.nextLine();
+
+        while (!country.matches(wordRegex)) {
+            System.out.println("Please, insert a valid country name with the first letter capitalized: ");
+            country = sc.nextLine();
+        }
+
+        System.out.println("Number of employees: ");
+        String employeeStr = sc.nextLine();
+
+        while (!employeeStr.matches(numRegex)) {
+            System.out.println("The value introduced is not a valid number, insert a valid value");
+            employeeStr = sc.nextLine();
+        }
+        int employees = Integer.parseInt(employeeStr);
+
+        System.out.println("Select the product (insert the number)\n1 - ECOMMERCE\n2 - MANUFACTURING\n3 - MEDICAL\n4 - PRODUCE\n5 - OTHER");
+        String chosenTwo = sc.nextLine();
+
+        Industry industry = null;
+        while (industry == null) {
+            switch (chosenTwo) {
+                case "1" -> industry = Industry.ECOMMERCE;
+                case "2" -> industry = Industry.MANUFACTURING;
+                case "3" -> industry = Industry.MEDICAL;
+                case "4" -> industry = Industry.PRODUCE;
+                case "5" -> industry = Industry.OTHER;
+                default -> {
+                    System.out.println("Invalid number, try again.");
+                    chosenTwo = sc.nextLine();
                 }
             }
         }
 
+        //Creates a new Account and a list for Contact and Opportunity
+        Account account = new Account(industry, employees, city, country);
+
+        System.out.println("Account Created!\n");
+
+        return account;
+    }
+
+
+
+
+
     //getters
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -94,9 +140,7 @@ public class Account {
     }
 
     //setters
-    public void setId(int id) {
-        this.id = idCounter++;
-    }
+
 
     public void setIndustry(Industry industry) {
         this.industry = industry;
@@ -121,4 +165,9 @@ public class Account {
     public void setOpportunityList(List<Opportunity> opportunityList) {
         this.opportunityList = opportunityList;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
 }

@@ -1,16 +1,23 @@
 package com.Unit2.OppHomeworkUnit2.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Contact {
 
     @Id
-    String name;
-    String phoneNumber;
-    String email;
-    String companyName;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    private String phoneNumber;
+
+    private String email;
+
+    private String companyName;
+    @ManyToOne
+    private Account accountContact;
 
     //constructors
     public Contact(){
@@ -21,6 +28,7 @@ public class Contact {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.companyName = companyName;
+
     }
 
     //getters
@@ -40,6 +48,12 @@ public class Contact {
         return companyName;
     }
 
+    public Long getId(){return id;}
+
+    public Account getAccountContact() {
+        return accountContact;
+    }
+
 
     //setters
     public void setName(String name) {
@@ -57,5 +71,11 @@ public class Contact {
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }
+    public void setId(Long id) {this.id = id;}
+
+    public void setAccountContact(Account accountContact) {
+        this.accountContact = accountContact;
+    }
 }
+
 
