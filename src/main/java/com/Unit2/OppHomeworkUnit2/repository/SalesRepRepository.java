@@ -11,6 +11,7 @@ import java.util.List;
 
 @Repository
 public interface SalesRepRepository extends JpaRepository<SalesRep, Long> {
+
 /*
     public List<Lead> findLeadBySalesRep();
 
@@ -22,10 +23,9 @@ public interface SalesRepRepository extends JpaRepository<SalesRep, Long> {
     @Query("SELECT * FROM Opportunity WHERE status LIKE 'CLOSED_LOST' AND WHERE SalesRep LIKE :salesRep")
     public List<Opportunity> findOpportunityBySalesRepAndStatusLost();
 
-    @Query("SELECT * FROM Opportunity WHERE status LIKE 'OPEN' AND WHERE SalesRep LIKE :salesRep")
-    public List<Opportunity> findOpportunityBySalesRepAndStatusOpen();
 
 
 
  */
 }
+

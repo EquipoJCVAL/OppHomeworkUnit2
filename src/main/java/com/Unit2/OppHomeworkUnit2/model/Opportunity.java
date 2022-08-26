@@ -48,6 +48,7 @@ public class Opportunity {
                 id, product, decisionMaker.getName(), status, accountOpportunity.getId(), salesRepOpportunity.getName());
     }
 
+
     public static void closeLost(Long id) throws ClassNotFoundException {
         boolean found = false;
         for (int i = 0; i < opportunitiesList.size(); i++) {

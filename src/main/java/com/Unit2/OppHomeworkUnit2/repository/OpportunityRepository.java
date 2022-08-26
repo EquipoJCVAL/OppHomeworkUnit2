@@ -1,9 +1,12 @@
 package com.Unit2.OppHomeworkUnit2.repository;
 
+import com.Unit2.OppHomeworkUnit2.model.Enums.Status;
 import com.Unit2.OppHomeworkUnit2.model.Opportunity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface OpportunityRepository extends JpaRepository<Opportunity, Long> {
@@ -94,6 +97,14 @@ public interface OpportunityRepository extends JpaRepository<Opportunity, Long> 
     String[] findAllClosedWonByProduct();
     @Query(nativeQuery = true, value = "SELECT product, status, COUNT(id) AS opportunities FROM opportunity  WHERE status = 2 GROUP BY product")
     String[] findAllOpenByProduct();
+
+
+    // REPORT BY SALES REP
+
+    public List<Opportunity> OrderBySalesRepOpportunity();
+
+    public List<Opportunity> findByStatusOrderBySalesRepOpportunity(Status status);
+
 
 
 
