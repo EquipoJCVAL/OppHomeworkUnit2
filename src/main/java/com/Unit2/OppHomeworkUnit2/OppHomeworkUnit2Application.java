@@ -4,12 +4,11 @@ package com.Unit2.OppHomeworkUnit2;
 
 import com.Unit2.OppHomeworkUnit2.model.Lead;
 import com.Unit2.OppHomeworkUnit2.model.Opportunity;
+import com.Unit2.OppHomeworkUnit2.model.SalesRep;
 import com.Unit2.OppHomeworkUnit2.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import java.util.Objects;
 import java.util.Scanner;
@@ -86,9 +85,9 @@ public class OppHomeworkUnit2Application{
 
 					case "new salesrep" -> System.out.println();
 
-					case "new lead" -> Lead.newLead();
+					case "new lead" -> leadRepository.save(Lead.newLead());
 
-					case "convert" -> Lead.convertID(id);
+					case "convert" -> SalesRep.newSalesRep(); leadRepository.findById().convertID(lead);
 
 					case "close lost" -> Opportunity.closeLost(id);
 
