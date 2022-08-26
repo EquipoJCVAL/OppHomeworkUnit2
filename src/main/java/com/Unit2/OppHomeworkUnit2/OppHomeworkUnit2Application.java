@@ -85,9 +85,9 @@ public class OppHomeworkUnit2Application{
 
 					case "new salesrep" -> System.out.println();
 
-					case "new lead" -> leadRepository.save(Lead.newLead());
+					//case "new lead" -> leadRepository.save(Lead.newLead());
 
-					case "convert" -> SalesRep.newSalesRep(); leadRepository.findById().convertID(lead);
+					case "convert" -> SalesRep.newSalesRep(); //leadRepository.findById().convertID(lead);
 
 					case "close lost" -> Opportunity.closeLost(id);
 
@@ -166,7 +166,6 @@ public class OppHomeworkUnit2Application{
 
 					case "report open by salesrep" -> salesRepRepository.findOpportunityBySalesRepAndStatusOpen();
 
-					 */
 
 					// ======================== BY PRODUCT =======================================
 
