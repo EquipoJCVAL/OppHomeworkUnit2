@@ -100,7 +100,7 @@ public class Account {
         }
 
         //Creates a new Account and a list for Contact and Opportunity
-        Account account = new Account(industry, employees, city, country, );
+        Account account = new Account(industry, employees, city, country);
 
         System.out.println("Account Created!\n");
 

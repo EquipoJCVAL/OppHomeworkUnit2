@@ -2,7 +2,7 @@
 
 package com.Unit2.OppHomeworkUnit2;
 
-import com.Unit2.OppHomeworkUnit2.model.Lead;
+import com.Unit2.OppHomeworkUnit2.model.Enums.Status;
 import com.Unit2.OppHomeworkUnit2.model.Opportunity;
 import com.Unit2.OppHomeworkUnit2.model.SalesRep;
 import com.Unit2.OppHomeworkUnit2.repository.*;
@@ -89,9 +89,26 @@ public class OppHomeworkUnit2Application{
 
 					case "convert" -> SalesRep.newSalesRep(); //leadRepository.findById().convertID(lead);
 
-					case "close lost" -> Opportunity.closeLost(id);
+					case "close lost" -> {
+						if (opportunityRepository.findById(id).isPresent()) {
+							Opportunity opportunity = opportunityRepository.findById(id).get();
+							opportunity.setStatus(Status.CLOSED_LOST);
+							opportunityRepository.save(opportunity);
+						} else {
+							System.out.println("The ID introduced doesn't match any existing Opportunities");
+						}
 
-					case "close won" -> Opportunity.closeWon(id);
+					}
+					case "close won" -> {
+						if (opportunityRepository.findById(id).isPresent()) {
+							Opportunity opportunity = opportunityRepository.findById(id).get();
+							opportunity.setStatus(Status.CLOSED_WON);
+							opportunityRepository.save(opportunity);
+						} else {
+							System.out.println("The ID introduced doesn't match any existing Opportunities");
+						}
+
+					}
 
 
                 /*
@@ -156,15 +173,35 @@ public class OppHomeworkUnit2Application{
 					// ======================== BY SALES REP =======================================
 
 
-					case "report lead by salesrep" -> salesRepRepository.findLeadBySalesRep();
+					case "report lead by salesrep" -> {
+						for (int i = 0; i < leadRepository.OrderBySalesRepLead().size(); i++) {
+							System.out.println(leadRepository.OrderBySalesRepLead().get(i));
+						}
+					}
 
-					case "report opportunity by salesrep" -> salesRepRepository.findOpportunityBySalesRep();
+					case "report opportunity by salesrep" -> {
+						for (int i = 0; i < opportunityRepository.OrderBySalesRepOpportunity().size(); i++) {
+							System.out.println(opportunityRepository.OrderBySalesRepOpportunity().get(i));
+						}
+					}
 
-					case "report closed-won by salesrep" -> salesRepRepository.findOpportunityBySalesRepAndStatusWon();
+					case "report closed-won by salesrep" -> {
+						for (int i = 0; i < opportunityRepository.findByStatusOrderBySalesRepOpportunity(Status.CLOSED_WON).size(); i++) {
+							System.out.println(opportunityRepository.findByStatusOrderBySalesRepOpportunity(Status.CLOSED_WON).get(i));
+						}
+					}
 
-					case "report closed-lost by salesrep" -> salesRepRepository.findOpportunityBySalesRepAndStatusLost();
+					case "report closed-lost by salesrep" -> {
+						for (int i = 0; i < opportunityRepository.findByStatusOrderBySalesRepOpportunity(Status.CLOSED_LOST).size(); i++) {
+							System.out.println(opportunityRepository.findByStatusOrderBySalesRepOpportunity(Status.CLOSED_LOST).get(i));
+						}
+					}
 
-					case "report open by salesrep" -> salesRepRepository.findOpportunityBySalesRepAndStatusOpen();
+					case "report open by salesrep" -> {
+						for (int i = 0; i < opportunityRepository.findByStatusOrderBySalesRepOpportunity(Status.OPEN).size(); i++) {
+							System.out.println(opportunityRepository.findByStatusOrderBySalesRepOpportunity(Status.OPEN).get(i));
+						}
+					}
 
 
 					// ======================== BY PRODUCT =======================================

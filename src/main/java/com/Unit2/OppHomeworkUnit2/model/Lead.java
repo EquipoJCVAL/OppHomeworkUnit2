@@ -212,7 +212,7 @@ public class Lead {
                         }
 
                         //Creates a new Account and a list for Contact and Opportunity
-                        Account account = new Account(industry, employees, city, country, contactList, opportunityList);
+                        Account account = new Account(industry, employees, city, country);
 
                         //Add Lead to another list and delete it from the current one
                         oldLeadList.add(leadList.get(i));
