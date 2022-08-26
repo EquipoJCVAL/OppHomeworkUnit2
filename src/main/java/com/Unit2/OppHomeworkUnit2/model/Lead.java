@@ -158,10 +158,11 @@ public class Lead {
                             }
                         }
                         //Creates a new Contact with the Lead's data, adds it and Opportunity in the respective lists
-                        Lead lead = leadList.get(i);
-                        Contact contact = new Contact(lead.getName(), lead.getPhoneNumber(), lead.getEmail(), lead.getCompanyName());
+                        Contact contact = new Contact(leadList.get(i).getName(), leadList.get(i).getPhoneNumber(), leadList.get(i).getEmail(), leadList.get(i).getCompanyName());
+                        contactList.add(contact);
                         Opportunity opportunity = new Opportunity(product, truckNum, contact, Status.OPEN);
-                        opportunity.setSalesRepOpportunity(lead.getSalesRepLead());
+                        Opportunity.opportunitiesList.add(opportunity);
+                        opportunityList.add(opportunity);
 
                         //Account info
                         input.nextLine();
@@ -257,19 +258,6 @@ public class Lead {
         return companyName;
     }
 
-    public static ArrayList<Lead> getOldLeadList() {
-        return oldLeadList;
-    }
-
-    public SalesRep getSalesRepLead() {
-        return salesRepLead;
-    }
-
-    public static ArrayList<Lead> getLeadList() {
-        return leadList;
-    }
-
-
     //setters
 
     public void setName(String name) {
@@ -287,44 +275,4 @@ public class Lead {
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }
-
-    public static void setOldLeadList(ArrayList<Lead> oldLeadList) {
-        Lead.oldLeadList = oldLeadList;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setSalesRepLead(SalesRep salesRepLead) {
-        this.salesRepLead = salesRepLead;
-    }
-
-
-
-    public static void setLeadList(ArrayList<Lead> leadList) {
-        Lead.leadList = leadList;
-    }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
