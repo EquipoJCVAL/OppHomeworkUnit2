@@ -31,6 +31,11 @@ public class Contact {
 
     }
 
+    public static Contact newContact(Lead lead){
+        Contact contact = new Contact(lead.getName(), lead.getPhoneNumber(), lead.getEmail(), lead.getCompanyName());
+        return contact;
+    }
+
     //getters
     public String getName() {
         return name;

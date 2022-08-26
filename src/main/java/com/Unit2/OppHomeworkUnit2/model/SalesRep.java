@@ -35,7 +35,7 @@ public class SalesRep {
     //we use again the name regex to ensure the new sales rep has a valid name.
     static String nameRegex = "^[A-Z][a-z]*[ ][A-Z][a-z]+$";
 
-    public static void newSalesRep() {
+    public static SalesRep newSalesRep() {
 
         //With this method we simply call the Scanner so that we can get the 4 parameters to create a new lead.
         //And then test if they are valid matching them with the existing Regex variables.
@@ -47,6 +47,9 @@ public class SalesRep {
             System.out.println("The name introduced is not valid, please only use letters and capitalize the first one of each name.");
             leadName = sc.nextLine();
         }
+        SalesRep salesRep = new SalesRep(leadName);
+
+        return salesRep;
     }
 
     //getters
