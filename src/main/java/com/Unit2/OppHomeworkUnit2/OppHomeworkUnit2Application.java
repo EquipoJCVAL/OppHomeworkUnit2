@@ -233,7 +233,7 @@ public class OppHomeworkUnit2Application{
 
 
 					// ======================== BY SALES REP =======================================
-/*
+
 
 					case "report lead by salesrep" -> {
 						for (int i = 0; i < leadRepository.OrderBySalesRepLead().size(); i++) {
@@ -266,8 +266,6 @@ public class OppHomeworkUnit2Application{
 					}
 
 
-
- */
 					// ======================== BY PRODUCT =======================================
 
 					case "report opportunity by the product" -> {
