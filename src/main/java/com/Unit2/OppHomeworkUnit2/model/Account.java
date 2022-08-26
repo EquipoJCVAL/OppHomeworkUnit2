@@ -54,7 +54,7 @@ public class Account {
         String wordRegex = "([A-Z][a-z]+([ ]?[a-z]?['-]?)*)+";
         String numRegex = "[^a-z ]*([.0-9])*\\d";
 
-        System.out.println("Opportunity successfully created! To complete the process you must create an Account.");
+        System.out.println("Fill in the following fields");
         System.out.println("City name: ");
         String city = sc.nextLine();
 
@@ -74,10 +74,9 @@ public class Account {
         System.out.println("Number of employees: ");
         String employeeStr = sc.nextLine();
 
-        while (!employeeStr.matches(wordRegex)) {
+        while (!employeeStr.matches(numRegex)) {
             System.out.println("The value introduced is not a valid number, insert a valid value");
             employeeStr = sc.nextLine();
-
         }
         int employees = Integer.parseInt(employeeStr);
 

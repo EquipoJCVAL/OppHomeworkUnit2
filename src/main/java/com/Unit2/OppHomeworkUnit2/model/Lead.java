@@ -43,19 +43,10 @@ public class Lead {
     static String phoneRegex = "^\\s*(?:\\+?(\\d{1,3}))?([-. (]*(\\d{3})[-. )]*)?((\\d{3})[-. ]*(\\d{2,4})(?:[-.x ]*(\\d+))?)\\s*$";
     static String emailRegex = "([\\w\\.\\-_]+)?\\w+@[\\w-_]+(\\.\\w+){1,}";
 
-    //We create a leadList so that they are all in the same list so that they can be accessed by show Leads
-    static ArrayList<Lead> leadList = new ArrayList<Lead>();
-    //We create an "oldLeadList" so that once the leads are converted and removed from the system, users should still be able to search that ID
-    //and recieve that the lead with that ID is no longer in the system, aswell as a separate message if that ID doesn't exist/was never in the system.
-    static ArrayList<Lead> oldLeadList = new ArrayList<Lead>();
-
-
 
 
     public static Lead newLead(SalesRep salesRep) {
 
-
-        //LeadRepository leadRepository;
 
         //With this method we simply call the Scanner so that we can get the 4 parameters to create a new lead.
         //And then test if they are valid matching them with the existing Regex variables.
@@ -189,5 +180,13 @@ public class Lead {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public SalesRep getSalesRepLead() {
+        return salesRepLead;
+    }
+
+    public void setSalesRepLead(SalesRep salesRepLead) {
+        this.salesRepLead = salesRepLead;
     }
 }

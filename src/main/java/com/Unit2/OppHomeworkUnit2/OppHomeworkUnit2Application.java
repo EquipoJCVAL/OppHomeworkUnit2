@@ -2,10 +2,7 @@
 
 package com.Unit2.OppHomeworkUnit2;
 
-import com.Unit2.OppHomeworkUnit2.model.Contact;
-import com.Unit2.OppHomeworkUnit2.model.Lead;
-import com.Unit2.OppHomeworkUnit2.model.Opportunity;
-import com.Unit2.OppHomeworkUnit2.model.SalesRep;
+import com.Unit2.OppHomeworkUnit2.model.*;
 import com.Unit2.OppHomeworkUnit2.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -25,7 +22,7 @@ public class OppHomeworkUnit2Application{
 	}
 
 	@Bean
-	public CommandLineRunner demo(AccountRepository accountRepository, OpportunityRepository opportunityRepository, LeadRepository leadRepository, SalesRepRepository salesRepRepository) {
+	public CommandLineRunner demo(AccountRepository accountRepository, ContactRepository contactRepository, OpportunityRepository opportunityRepository, LeadRepository leadRepository, SalesRepRepository salesRepRepository) {
 		return (args) -> {
 
 			System.out.println("     _______.     ___       __       _______     _______.   .___  ___.      ___      .__   __.      ___       _______  _______ .______      \n" +
@@ -38,6 +35,7 @@ public class OppHomeworkUnit2Application{
 
 
 			Scanner input = new Scanner(System.in);
+			String numRegex = "[^a-z ]*([.0-9])*\\d";
 
 			String exit = null;
 
@@ -87,7 +85,6 @@ public class OppHomeworkUnit2Application{
 					case "new salesrep" -> salesRepRepository.save(SalesRep.newSalesRep());
 
 					case "new lead" -> {
-						String numRegex = "[^a-z ]*([.0-9])*\\d";
 						Scanner sc = new Scanner(System.in);
 						System.out.println("Please insert the SalesRep Id number you'd want to associate with the new Lead: ");
 						String salesRepIdString = input.nextLine();
@@ -107,14 +104,44 @@ public class OppHomeworkUnit2Application{
 					case "convert" -> {
 						Scanner sc = new Scanner(System.in);
 						Lead lead = leadRepository.findById(id).get();
-						Contact contact = Contact.newContact(lead);
+						Contact contact = new Contact(lead.getName(), lead.getPhoneNumber(), lead.getEmail(), lead.getCompanyName());
 						System.out.println("Would you like to create a new Account? (Y/N)");
 						String choose = sc.nextLine().toLowerCase().trim();
+						SalesRep salesRep = salesRepRepository.findById(lead.getSalesRepLead().getId()).get();
+						contactRepository.save(contact);
 
 						switch (choose){
-							case "y" -> System.out.println();
-							case "n" -> System.out.println();
+							case "y" -> {
+								Account account = Account.createAccount();
 
+
+								opportunityRepository.save(Lead.convertID(lead, account, contact, salesRep));
+							}
+							case "n" -> {
+								System.out.println("Please, insert an Id Account: " );
+								String accountId = input.nextLine();
+								if (!accountId.matches(numRegex)) {
+									System.out.println("The introduced value is not valid, please introduce a valid value.");
+									accountId = input.nextLine();
+
+
+								}
+								Long accId = Long.parseLong(accountId);
+								if(accountRepository.findById(accId).isPresent()){
+									Account account = accountRepository.findById(accId).get();
+									opportunityRepository.save(Lead.convertID(lead, account, contact, salesRep));
+									leadRepository.delete(lead);
+								}
+								System.out.println("No account found with the Id inserted.");
+
+								if (accountRepository.findById(accId).isPresent()) {
+									Account account = accountRepository.findById(accId).get();
+									opportunityRepository.save(Lead.convertID(lead, account, contact, salesRep));
+									leadRepository.delete(lead);
+									System.out.println("Lead successfully converted!");
+								}
+
+							}
 						}
 
 					}
