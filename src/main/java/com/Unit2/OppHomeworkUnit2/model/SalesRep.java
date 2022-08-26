@@ -1,7 +1,7 @@
 package com.Unit2.OppHomeworkUnit2.model;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
 public class SalesRep {
