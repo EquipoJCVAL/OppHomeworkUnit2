@@ -1,7 +1,7 @@
 package com.Unit2.OppHomeworkUnit2.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class SalesRep {
@@ -14,7 +14,7 @@ public class SalesRep {
     @OneToMany (mappedBy = "salesRepLead")
     List<Lead> leadList;
 
-    @OneToMany (mappedBy = "salesRepOpportunity")
+    @OneToMany(mappedBy = "salesRepOpportunity")
     List<Opportunity> opportunityList;
 
     //constructor

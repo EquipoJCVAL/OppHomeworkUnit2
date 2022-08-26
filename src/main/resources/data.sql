@@ -30,3 +30,4 @@
 --("HYBRID", 43, "CLOSED_LOST", 1, 2, 3),
 --("FLATBED", 15, "CLOSED_WON", 2, 3, 1),
 --("FLATBED", 16, "OPEN", 3, 2, 3);
+
