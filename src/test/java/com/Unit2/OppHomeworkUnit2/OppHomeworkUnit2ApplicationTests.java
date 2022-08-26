@@ -54,21 +54,21 @@ public class OppHomeworkUnit2ApplicationTests {
 	Lead lead4 = new Lead("Pino Pinello", "1234 543 654", "pini@pinelli.com", "Pinello Company", salesRep4);
 	Lead lead5 = new Lead("Barbara Letta", "989 345823 4329", "letta@lettata.com", "Latteria", salesRep4);
 	// Accounts
-	List<Contact> contacts = new ArrayList<>();
-	List<Opportunity> opportunities = new ArrayList<>();
-	Account account1 = new Account(Industry.ECOMMERCE, 56, "Paris", "France", contacts, opportunities);
-	Account account2 = new Account(Industry.PRODUCE, 20, "London", "England", contacts, opportunities);
-	Account account3 = new Account(Industry.MANUFACTURING, 24, "Berlin", "Germany", contacts, opportunities);
-	Account account4 = new Account(Industry.MEDICAL, 13, "Helsinky", "Finland", contacts, opportunities);
+
+	Account account1 = new Account(Industry.ECOMMERCE, 56, "Paris", "France");
+	Account account2 = new Account(Industry.PRODUCE, 20, "London", "England");
+	Account account3 = new Account(Industry.MANUFACTURING, 24, "Berlin", "Germany");
+	Account account4 = new Account(Industry.MEDICAL, 13, "Helsinky", "Finland");
 
 	// Contacts
 	Contact contact1 = new Contact("Pino Pinello", "1234 543 654", "pini@pinelli.com", "Pinello Company");
 	Contact contact2 = new Contact("Barbara Letta", "989 345823 4329", "letta@lettata.com", "Latteria");
 
 	// Opportunities
-	Opportunity opportunity1 = new Opportunity(Product.BOX, 43, contact1, Status.OPEN);
-	Opportunity opportunity2 = new Opportunity(Product.HYBRID, 35, contact2, Status.CLOSED_LOST);
-	Opportunity opportunity3 = new Opportunity(Product.FLATBED, 13, contact2, Status.CLOSED_WON);
+
+	Opportunity opportunity1 = new Opportunity(Product.BOX, 43, contact1, Status.OPEN, account2, salesRep1);
+	Opportunity opportunity2 = new Opportunity(Product.HYBRID, 35, contact2, Status.CLOSED_LOST, account3, salesRep2);
+	Opportunity opportunity3 = new Opportunity(Product.FLATBED, 13, contact2, Status.CLOSED_WON, account3, salesRep4);
 
 
 	@BeforeEach

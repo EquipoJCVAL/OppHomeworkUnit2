@@ -12,7 +12,20 @@ import java.util.List;
 @Repository
 public interface SalesRepRepository extends JpaRepository<SalesRep, Long> {
 
+/*
+    public List<Lead> findLeadBySalesRep();
+
+    public List<Opportunity> findOpportunityBySalesRep();
+
+    @Query("SELECT * FROM Opportunity WHERE status LIKE 'CLOSED_WON' AND WHERE SalesRep LIKE :salesRep")
+    public List<Opportunity> findOpportunityBySalesRepAndStatusWon();
+
+    @Query("SELECT * FROM Opportunity WHERE status LIKE 'CLOSED_LOST' AND WHERE SalesRep LIKE :salesRep")
+    public List<Opportunity> findOpportunityBySalesRepAndStatusLost();
 
 
+
+
+ */
 }
 

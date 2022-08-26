@@ -2,6 +2,8 @@
 
 package com.Unit2.OppHomeworkUnit2;
 
+import com.Unit2.OppHomeworkUnit2.model.Contact;
+import com.Unit2.OppHomeworkUnit2.model.Lead;
 import com.Unit2.OppHomeworkUnit2.model.Enums.Status;
 import com.Unit2.OppHomeworkUnit2.model.Opportunity;
 import com.Unit2.OppHomeworkUnit2.model.SalesRep;
@@ -83,11 +85,40 @@ public class OppHomeworkUnit2Application{
 				//Dependiendo de el comand introducido el switch llamara a los metodos que corresponden segun su comando
 				switch (command) {
 
-					case "new salesrep" -> System.out.println();
+					case "new salesrep" -> salesRepRepository.save(SalesRep.newSalesRep());
 
-					//case "new lead" -> leadRepository.save(Lead.newLead());
+					case "new lead" -> {
+						String numRegex = "[^a-z ]*([.0-9])*\\d";
+						Scanner sc = new Scanner(System.in);
+						System.out.println("Please insert the SalesRep Id number you'd want to associate with the new Lead: ");
+						String salesRepIdString = input.nextLine();
+						if (!salesRepIdString.matches(numRegex)) {
+							System.out.println("The introduced value is not valid, please introduce a valid value.");
+							salesRepIdString = input.nextLine();
 
-					case "convert" -> SalesRep.newSalesRep(); //leadRepository.findById().convertID(lead);
+						}
+						Long salesRepId = Long.parseLong(salesRepIdString);
+						SalesRep salesRep = salesRepRepository.findById(salesRepId).get();
+
+						leadRepository.save(Lead.newLead(salesRep));
+
+						System.out.println("A new Lead has been created!");
+					}
+
+					case "convert" -> {
+						Scanner sc = new Scanner(System.in);
+						Lead lead = leadRepository.findById(id).get();
+						Contact contact = Contact.newContact(lead);
+						System.out.println("Would you like to create a new Account? (Y/N)");
+						String choose = sc.nextLine().toLowerCase().trim();
+
+						switch (choose){
+							case "y" -> System.out.println();
+							case "n" -> System.out.println();
+
+						}
+
+					}
 
 					case "close lost" -> {
 						if (opportunityRepository.findById(id).isPresent()) {
@@ -171,7 +202,7 @@ public class OppHomeworkUnit2Application{
 
 
 					// ======================== BY SALES REP =======================================
-
+/*
 
 					case "report lead by salesrep" -> {
 						for (int i = 0; i < leadRepository.OrderBySalesRepLead().size(); i++) {
@@ -204,6 +235,8 @@ public class OppHomeworkUnit2Application{
 					}
 
 
+
+ */
 					// ======================== BY PRODUCT =======================================
 
 					case "report opportunity by the product" -> {

@@ -52,7 +52,7 @@ public class Lead {
 
 
 
-    public static void newLead() {
+    public static Lead newLead(SalesRep salesRep) {
 
 
         //LeadRepository leadRepository;
@@ -85,150 +85,65 @@ public class Lead {
                 System.out.println("Please input the new Lead's company name");
                 String leadCompany = sc.nextLine();
 
-                SalesRep salesrep = new SalesRep();
                 //once all the parameters are valid, we simply create the Lead.
-                Lead newLead = new Lead(leadName, leadPhone, leadEmail, leadCompany, salesrep);
+                Lead newLead = new Lead(leadName, leadPhone, leadEmail, leadCompany, salesRep);
 
                 //leadRepository.save(newLead);
-                leadList.add(newLead);
+                return newLead;
 
     }
 
 
-    public static void convertID(Long idNum) {
+    public static Opportunity convertID(Lead lead, Account account, Contact contact, SalesRep salesRep) {
         String wordRegex = "([A-Z][a-z]+([ ]?[a-z]?['-]?)*)+";
         String numRegex = "[^a-z ]*([.0-9])*\\d";
 
         Scanner input = new Scanner(System.in);
-        boolean found = false;
+        // Collect Opportunity parameters - number of trucks and product
+        System.out.println("Fill in the following fields.");
+        System.out.println("Number of trucks: ");
+        String truckString = input.nextLine();
 
-        List<Opportunity> opportunityList = new ArrayList<>();
-        List<Contact> contactList = new ArrayList<>();
+        if (!truckString.matches(numRegex)) {
+            System.out.println("The introduced value is not valid, please introduce a valid value.");
+            truckString = input.nextLine();
+        }
+        int truckNum = Integer.parseInt(truckString);
 
+        System.out.println("Select the product (insert the number)\n1 - BOX\n2 - FLATBED\n3 - HYBRID");
+        String chosenOneStr = input.nextLine();
+        if (!chosenOneStr.matches(numRegex)) {
+            System.out.println("the introduced value is not valid, please try again.");
+            System.out.println("Select the product (insert the number)\n1 - BOX\n2 - FLATBED\n3 - HYBRID");
+            chosenOneStr = input.nextLine();
+        }
+        int chosenOne = Integer.parseInt(chosenOneStr);
 
-        //Since it's a long process, this allows the user to interrupt it from the beginning
-        System.out.println("Press Enter to process the conversion or type 'exit' to quit.");
-        String exit = input.nextLine();
-        while(!found) {
+        Product product = null;
+        while (product == null) {
 
-            for (int i = 0; i < leadList.size(); i++) {
-                if (leadList.get(i).getId() == idNum) {
+            switch (chosenOne) {
 
-                    found = true;
-
-                    while (!Objects.equals(exit, "exit")) {
-
-                        // Collect Opportunity parameters - number of trucks and product
-                        System.out.println("Fill in the following fields.");
-                        System.out.println("Number of trucks: ");
-                        String truckString = input.nextLine();
-
-                        if (!truckString.matches(numRegex)) {
-                            System.out.println("The introduced value is not valid, please introduce a valid value.");
-                            truckString = input.nextLine();
-                        }
-                        int truckNum = Integer.parseInt(truckString);
-
-                        System.out.println("Select the product (insert the number)\n1 - BOX\n2 - FLATBED\n3 - HYBRID");
-                        String chosenOneStr = input.nextLine();
-                        if (!chosenOneStr.matches(numRegex)) {
-                            System.out.println("the introduced value is not valid, please try again.");
-                            System.out.println("Select the product (insert the number)\n1 - BOX\n2 - FLATBED\n3 - HYBRID");
-                            chosenOneStr = input.nextLine();
-                        }
-                        int chosenOne = Integer.parseInt(chosenOneStr);
-
-                        Product product = null;
-                        while (product == null) {
-
-                            switch (chosenOne) {
-
-                                case 1 -> product = Product.BOX;
-                                case 2 -> product = Product.FLATBED;
-                                case 3 -> product = Product.HYBRID;
-                                default -> {
-                                    System.out.println("Invalid number, try again.");
-                                    chosenOneStr = input.nextLine();
-                                    if (!chosenOneStr.matches(numRegex)) {
-                                        System.out.println("Invalid number, try again.");
-                                        chosenOneStr = input.nextLine();
-                                    }
-                                    chosenOne = Integer.parseInt(chosenOneStr);
-                                }
-                            }
-                        }
-                        //Creates a new Contact with the Lead's data, adds it and Opportunity in the respective lists
-                        Contact contact = new Contact(leadList.get(i).getName(), leadList.get(i).getPhoneNumber(), leadList.get(i).getEmail(), leadList.get(i).getCompanyName());
-                        contactList.add(contact);
-                        Opportunity opportunity = new Opportunity(product, truckNum, contact, Status.OPEN);
-                        Opportunity.opportunitiesList.add(opportunity);
-                        opportunityList.add(opportunity);
-
-                        //Account info
-                        input.nextLine();
-                        System.out.println("Opportunity successfully created! To complete the process you must create an Account.");
-                        System.out.println("City name: ");
-                        String city = input.nextLine();
-
-                        while (!city.matches(wordRegex)) {
-                            System.out.println("Please, insert a valid city name capitalized (for example 'New York'): ");
-                            city = input.nextLine();
-                        }
-
-                        System.out.println("Country of the organization: ");
-                        String country = input.nextLine();
-
-                        while (!country.matches(wordRegex)) {
-                            System.out.println("Please, insert a valid country name with the first letter capitalized: ");
-                            country = input.nextLine();
-                        }
-
-                        System.out.println("Number of employees: ");
-                        String employeeStr = input.nextLine();
-
-                        while (!employeeStr.matches(wordRegex)) {
-                            System.out.println("The value introduced is not a valid number, insert a valid value");
-                            employeeStr = input.nextLine();
-
-                        }
-                        int employees = Integer.parseInt(employeeStr);
-
-                        System.out.println("Select the product (insert the number)\n1 - ECOMMERCE\n2 - MANUFACTURING\n3 - MEDICAL\n4 - PRODUCE\n5 - OTHER");
-                        String chosenTwo = input.nextLine();
-
-                        Industry industry = null;
-                        while (industry == null) {
-                            switch (chosenTwo) {
-                                case "1" -> industry = Industry.ECOMMERCE;
-                                case "2" -> industry = Industry.MANUFACTURING;
-                                case "3" -> industry = Industry.MEDICAL;
-                                case "4" -> industry = Industry.PRODUCE;
-                                case "5" -> industry = Industry.OTHER;
-                                default -> {
-                                    System.out.println("Invalid number, try again.");
-                                    chosenTwo = input.nextLine();
-                                }
-                            }
-                        }
-
-                        //Creates a new Account and a list for Contact and Opportunity
-                        Account account = new Account(industry, employees, city, country);
-
-                        //Add Lead to another list and delete it from the current one
-                        oldLeadList.add(leadList.get(i));
-                        leadList.remove(leadList.get(i));
-
-                        }
-                    System.out.println("Account Created!\n");
-                    break;
+                case 1 -> product = Product.BOX;
+                case 2 -> product = Product.FLATBED;
+                case 3 -> product = Product.HYBRID;
+                default -> {
+                    System.out.println("Invalid number, try again.");
+                    chosenOneStr = input.nextLine();
+                    if (!chosenOneStr.matches(numRegex)) {
+                        System.out.println("Invalid number, try again.");
+                        chosenOneStr = input.nextLine();
+                    }
+                    chosenOne = Integer.parseInt(chosenOneStr);
                 }
             }
+
         }
-        // ID not found
-        if (!found && !exit.equals("exit")) {
-            System.out.println("This Id doesn't match with any Lead, it could have been already converted into a Opportunity, you can verify typing 'Show Opportunities' in the main Menu, otherwise try again with the correct Id.");
-        }
+        Opportunity opportunity = new Opportunity(product, truckNum, contact, Status.OPEN, account, salesRep);
+        return opportunity;
     }
+
+
     @Override
     public String toString() {
         return String.format(

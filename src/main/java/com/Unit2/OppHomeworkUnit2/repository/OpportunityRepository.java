@@ -104,19 +104,8 @@ public interface OpportunityRepository extends JpaRepository<Opportunity, Long> 
     public List<Opportunity> OrderBySalesRepOpportunity();
 
     public List<Opportunity> findByStatusOrderBySalesRepOpportunity(Status status);
-    //public List<Opportunity> findByStatusOrderBySalesRepOpportunity
 
-    /*
-    @Query(nativeQuery = true, value = "SELECT salesRepOpportunity, status, COUNT(id) AS opportunities FROM opportunity  WHERE status = 2 GROUP BY salesRepOpportunity")
-    public List<Opportunity> findOpportunityBySalesRepAndStatusWon();
 
-    @Query(nativeQuery = true, value = "SELECT salesRepOpportunity, status, COUNT(id) AS opportunities FROM opportunity  WHERE status = 1 GROUP BY salesRepOpportunity")
-    public List<Opportunity> findOpportunityBySalesRepAndStatusLost();
-
-    @Query(nativeQuery = true, value = "SELECT salesRepOpportunity, status, COUNT(id) AS opportunities FROM opportunity  WHERE status = 0 GROUP BY salesRepOpportunity")
-    public List<Opportunity> findOpportunityBySalesRepAndStatusOpen();
-
-     */
 
 
 }

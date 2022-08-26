@@ -35,7 +35,7 @@ public class Opportunity {
     //constructor
     public Opportunity(){
     }
-    public Opportunity(Product product, int quantity, Contact decisionMaker, Status status) {
+    public Opportunity(Product product, int quantity, Contact decisionMaker, Status status, Account account, SalesRep salesRep) {
         this.product = product;
         this.quantity = quantity;
         this.decisionMaker = decisionMaker;
@@ -46,6 +46,35 @@ public class Opportunity {
         return String.format(
                 "Opportunity [Id=%d, Product='%s', DecisionMaker='%s', Status='%s', AccountId='%s', SalesRep='%s']",
                 id, product, decisionMaker.getName(), status, accountOpportunity.getId(), salesRepOpportunity.getName());
+    }
+
+
+    public static void closeLost(Long id) throws ClassNotFoundException {
+        boolean found = false;
+        for (int i = 0; i < opportunitiesList.size(); i++) {
+            if (opportunitiesList.get(i).getId() == id) {
+                opportunitiesList.get(i).setStatus(Status.CLOSED_LOST);
+                System.out.println("The opportunity status has been updated to lost!");
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("The ID provided does not correspond to any existing opportunities.");
+        }
+    }
+
+    public static void closeWon(Long id){
+        boolean found = false;
+        for (int i = 0; i < opportunitiesList.size(); i++) {
+            if (opportunitiesList.get(i).getId() == id) {
+                opportunitiesList.get(i).setStatus(Status.CLOSED_WON);
+                System.out.println("The opportunity status has been updated to won!");
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("The ID provided does not correspond to any existing opportunities.");
+        }
     }
 
 
